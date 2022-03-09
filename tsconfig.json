@@ -17,12 +17,15 @@
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*"
+    "src/components/**/**/*",
+    "src/components/**/*",
   ],
   "exclude": [
     "node_modules",
     "build",
-    "src/**/*.stories.tsx",
-    "src/**/*.test.tsx"
+    "src/components/**/**/*.stories.tsx",
+    "src/components/**/**/*.test.tsx",
+    "src/components/**/*.stories.tsx",
+    "src/components/**/*.test.tsx"
   ]
 }
