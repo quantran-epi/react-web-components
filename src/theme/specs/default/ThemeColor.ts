@@ -1,4 +1,4 @@
-import { IThemeColor } from './../base/IThemeColor';
+import { IThemeColor } from '@theme/specs/abstract/base';
 
 export const ThemeColor: IThemeColor = {
     primary100: "",

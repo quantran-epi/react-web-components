@@ -14,12 +14,15 @@
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@theme/specs/abstract/*": ["./src/theme/specs/abstract/*"],
+      "@theme/specs/default": ["./src/theme/specs/default/index"],
+      "@theme/provider": ["./src/theme/provider/index"],
+      "@theme/responsive": ["./src/theme/responsive/index"],
+    }
   },
-  "include": [
-    "src/components/**/**/*",
-    "src/components/**/*",
-  ],
   "exclude": [
     "node_modules",
     "build",

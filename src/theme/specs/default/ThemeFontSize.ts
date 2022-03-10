@@ -1,4 +1,4 @@
-import { IThemeFontSize } from '../base/IThemeFontSize';
+import { IThemeFontSize } from '@theme/specs/abstract/base';
 
 export const ThemeFontSize: IThemeFontSize = {
     tiny: 10,

@@ -1,4 +1,4 @@
-import { IThemeBreakpoint } from './../base/IThemeBreakpoint';
+import { IThemeBreakpoint } from "@theme/specs/abstract/base";
 
 export const ThemeBreakpoint: IThemeBreakpoint = {
     xs: 480,

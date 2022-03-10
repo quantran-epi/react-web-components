@@ -1,4 +1,4 @@
-import { IThemeSpacing } from './../base/IThemeSpacing';
+import { IThemeSpacing } from '@theme/specs/abstract/base';
 
 export const ThemeSpacing: IThemeSpacing = {
     unit: "rem",
