@@ -59,6 +59,8 @@ export interface IThemeColor {
     border800: string;
     border900: string;
 
+    white: string;
+    gray50: string;
     gray100: string;
     gray200: string;
     gray300: string;
@@ -68,4 +70,5 @@ export interface IThemeColor {
     gray700: string;
     gray800: string;
     gray900: string;
+    black: string;
 }
