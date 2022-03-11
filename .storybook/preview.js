@@ -3,15 +3,19 @@
 import React from 'react';
 
 import { createTheme, ThemeProvider } from '../src/theme/provider';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+
+export const parameters = {
+    viewport: {
+        viewports: INITIAL_VIEWPORTS,
+    },
+};
 
 export const decorators = [
     (Story) => (
-        <ThemeProvider value={createTheme(specs => ({
-            color: {
-                primary300: "violet"
-            }
-        }))}>
+        <ThemeProvider>
             <Story />
         </ThemeProvider>
     ),
 ];
+
