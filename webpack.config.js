@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const nodeExternals = require('webpack-node-externals');
 module.exports = {
     entry: './src/index.ts',
+    mode: process.env.NODE_ENV || "development",
     externals: [nodeExternals()],
     output: {
         filename: 'index.js',
@@ -13,10 +14,15 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-            }
+                use: ["babel-loader"],
+            },
+            {
+                test: /\.(ts|tsx)$/,
+                exclude: /node_modules/,
+                use: ["ts-loader"],
+            },
         ]
     },
     resolve: {
