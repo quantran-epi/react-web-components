@@ -27,5 +27,11 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js', 'jsx'],
+        alias: {
+            "@theme/specs/abstract$": path.resolve(__dirname, './src/theme/specs/abstract'),
+            "@theme/specs/default": path.resolve(__dirname, './src/theme/specs/default/index.ts'),
+            "@theme/provider": path.resolve(__dirname, './src/theme/provider/index.ts'),
+            "@theme/responsive": path.resolve(__dirname, './src/theme/responsive/index.ts')
+        },
     },
 }

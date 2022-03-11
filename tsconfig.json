@@ -27,9 +27,9 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/components/**/**/*.stories.tsx",
-    "src/components/**/**/*.test.tsx",
-    "src/components/**/*.stories.tsx",
-    "src/components/**/*.test.tsx"
+    // "src/components/**/**/*.stories.tsx",
+    // "src/components/**/**/*.test.tsx",
+    // "src/components/**/*.stories.tsx",
+    // "src/components/**/*.test.tsx"
   ]
 }

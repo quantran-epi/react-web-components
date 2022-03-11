@@ -3,8 +3,8 @@ import { IThemeColor } from '@theme/specs/abstract/base';
 export const ThemeColor: IThemeColor = {
     primary100: "",
     primary200: "",
-    primary300: "",
-    primary400: "",
+    primary300: "orange",
+    primary400: "blue",
     primary500: "",
     primary600: "",
     primary700: "",
