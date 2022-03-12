@@ -5,7 +5,33 @@
         "@babel/preset-typescript"
     ],
     "plugins": [
+        [
+            "module-resolver",
+            {
+                "root": [
+                    "./src"
+                ],
+                "extensions": [
+                    ".tsx",
+                    ".ts",
+                    ".js",
+                    "jsx"
+                ],
+                "alias": {
+                    "@theme/specs/abstract": "./src/theme/specs/abstract",
+                    "@theme/specs/default": "./src/theme/specs/default/index.ts",
+                    "@theme/provider": "./src/theme/provider/index.ts",
+                    "@theme/responsive": "./src/theme/responsive",
+                    "@theme/style-props": "./src/theme/style-props/index.t"
+                }
+            }
+        ],
         "@babel/plugin-proposal-class-properties",
-        "babel-plugin-styled-components"
+        [
+            "babel-plugin-styled-components",
+            {
+                "displayName": false
+            }
+        ]
     ]
 }

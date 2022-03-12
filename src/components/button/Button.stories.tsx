@@ -5,4 +5,4 @@ export default {
     title: "Button",
 };
 
-export const Default = () => <Button>Button</Button>
+export const Default = () => <Button margin={[1, 2, 3, 4, 5]}>Button</Button>

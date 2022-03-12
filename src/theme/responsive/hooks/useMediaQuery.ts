@@ -1,5 +1,6 @@
 import { IThemeBreakpoint } from "@theme/specs/abstract/base";
-import { BreakpointValueObject } from "../types";
+import { LiteralUnion } from "type-fest";
+import { BreakpointType, BreakpointValueObject } from "../types";
 
 interface IUseMediaQueryProps {
     breakpoints: BreakpointValueObject;
@@ -7,11 +8,12 @@ interface IUseMediaQueryProps {
 }
 
 interface IUseMediaQuery {
-    above: (key) => string;
-    below: (key) => string;
-    between: (start, end) => string;
-    only: (key) => string;
-    not: (key) => string;
+    above: (key: BreakpointType | number) => string;
+    below: (key: BreakpointType | number) => string;
+    between: (start: BreakpointType | number, end: BreakpointType | number) => string;
+    only: (key: BreakpointType) => string;
+    not: (key: BreakpointType) => string;
+    sortKeys: BreakpointType[];
 }
 
 const sortBreakpointsValues = (breakpoints: BreakpointValueObject) => {
@@ -28,34 +30,31 @@ export const useMediaQuery = ({
     step
 }: IUseMediaQueryProps): IUseMediaQuery => {
     const sortedValues = sortBreakpointsValues(breakpoints);
-    const keys = Object.keys(sortedValues);
+    const keys = Object.keys(sortedValues) as BreakpointType[];
     const unit = "px";
 
-    const above = (key) => {
+    const above = (key: BreakpointType | number) => {
         const value = typeof breakpoints[key] === 'number' ? breakpoints[key] : key;
         return `@media (min-width:${value}${unit})`;
     }
 
-    const below = (key) => {
+    const below = (key: BreakpointType | number) => {
         const value = typeof breakpoints[key] === 'number' ? breakpoints[key] : key;
         return `@media (max-width:${value - step / 100}${unit})`;
     }
 
-    const between = (start, end) => {
-        const endIndex = keys.indexOf(end);
+    const between = (start: BreakpointType | number, end: BreakpointType | number) => {
+        const endIndex = keys.indexOf(end.toString() as any);
 
         return (
             `@media (min-width:${typeof breakpoints[start] === 'number' ? breakpoints[start] : start
             }${unit}) and ` +
             `(max-width:${(endIndex !== -1 && typeof breakpoints[keys[endIndex]] === 'number'
-                ? breakpoints[keys[endIndex]]
-                : end) -
-            step / 100
-            }${unit})`
+                ? breakpoints[keys[endIndex]] : end) as number - step / 100}${unit})`
         );
     }
 
-    const only = (key) => {
+    const only = (key: BreakpointType) => {
         if (keys.indexOf(key) + 1 < keys.length) {
             return between(key, keys[keys.indexOf(key) + 1]);
         }
@@ -63,7 +62,7 @@ export const useMediaQuery = ({
         return above(key);
     }
 
-    const not = (key) => {
+    const not = (key: BreakpointType) => {
         // handle first and last key separately, for better readability
         const keyIndex = keys.indexOf(key);
         if (keyIndex === 0) {
@@ -81,6 +80,7 @@ export const useMediaQuery = ({
         below,
         between,
         not,
-        only
+        only,
+        sortKeys: keys
     }
 }

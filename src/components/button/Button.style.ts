@@ -1,11 +1,13 @@
 import { useResponsiveCss } from "@theme/responsive/hooks";
+import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
 interface IUseButtonStyleProps extends IButtonProps {
+    
 }
 
-interface IUseButtonStyle {
-    css: string;
+interface IUseButtonStyle extends IComponentStyleHook {
+
 }
 
 export const useButtonStyle = ({
