@@ -1,3 +1,6 @@
-import { BreakpointType } from '@theme/responsive';
+import { BreakpointValueObject } from '@theme/responsive/types';
 
-export type IThemeBreakpoint = Record<BreakpointType, number>;
+export type IThemeBreakpoint = {
+    values: BreakpointValueObject;
+    step: number;
+};

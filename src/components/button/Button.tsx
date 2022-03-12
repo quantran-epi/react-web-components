@@ -1,20 +1,18 @@
 import React from 'react';
-import { IButtonProps } from './Button.types';
 import styled from 'styled-components';
-import { useTheme } from '@theme/provider';
+import { useButtonStyle } from './Button.style';
+import { IButtonProps, IStyledButtonProps } from './Button.types';
 
-const StyledButton = styled.button<IButtonProps>`
-    background-color: ${props => props.color};
-    @media (max-width: 480px) {
-        color: white;
-    }
+const StyledButton = styled.button<IStyledButtonProps>`
+    ${props => props.css}
 `
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
+    ...props
 }, ref) => {
-    const { theme } = useTheme();
+    const { css } = useButtonStyle(props);
 
-    return <StyledButton ref={ref}>
+    return <StyledButton ref={ref} css={css}>
         {children}
     </StyledButton>
 })
