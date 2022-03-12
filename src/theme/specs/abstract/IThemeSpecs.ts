@@ -1,3 +1,4 @@
+import { IThemeShadow } from './base/IThemeShadow';
 import { IThemeButton } from './components/IThemeButton';
 import { IThemeBreakpoint } from './base/IThemeBreakpoint';
 import { IThemeColor } from './base/IThemeColor';
@@ -15,5 +16,6 @@ export interface IThemeSpecs {
     fontFamily: IThemeFontFamily;
     spacing: IThemeSpacing;
     breakpoint: IThemeBreakpoint;
+    shadow: IThemeShadow;
     components: IThemeComponentSpecs;
 }

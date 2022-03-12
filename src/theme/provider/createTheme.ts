@@ -14,6 +14,7 @@ export const createTheme = <T extends IThemeSpecs = IThemeSpecs>(propsFunc: ICre
         breakpoint,
         fontFamily,
         fontSize,
+        shadow,
         components,
         ...others
     } = propsFunc(DefaultThemeSpecs);
@@ -23,6 +24,7 @@ export const createTheme = <T extends IThemeSpecs = IThemeSpecs>(propsFunc: ICre
     let _fontFamily = Object.assign({}, DefaultThemeSpecs.fontFamily, fontFamily);
     let _fontSize = Object.assign({}, DefaultThemeSpecs.fontSize, fontSize);
     let _breakpoint = Object.assign({}, DefaultThemeSpecs.breakpoint, breakpoint);
+    let _shadow = Object.assign({}, DefaultThemeSpecs.shadow, shadow);
 
     let _components = merge(DefaultThemeSpecs.components, components);
 
@@ -32,6 +34,7 @@ export const createTheme = <T extends IThemeSpecs = IThemeSpecs>(propsFunc: ICre
         fontFamily: _fontFamily,
         fontSize: _fontSize,
         spacing: _spacing,
+        shadow: _shadow,
         components: _components,
         ...others
     } as unknown as T
