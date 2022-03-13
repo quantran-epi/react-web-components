@@ -6,4 +6,9 @@ export default {
 };
 
 export const Default = () => <Button
-    marginVertical={[10, 50, 100, 200, 400]}>Button</Button>
+    margin={5}
+    padding={10}
+    marginBottom={[10, 50, 100]}
+    marginTop={[20, 30, 40]}
+    paddingBottom={[10, 30, 50]}
+    paddingTop={[60, 70, 80]}>Button</Button>

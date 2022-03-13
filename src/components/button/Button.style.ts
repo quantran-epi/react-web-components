@@ -17,20 +17,40 @@ export const useButtonStyle = ({
     marginLeft,
     marginRight,
     marginTop,
-    marginVertical
+    marginVertical,
+
+    padding,
+    paddingBottom,
+    paddingHorizontal,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingVertical,
+
 }: IUseButtonStyleProps): IUseButtonStyle => {
-    const { fromMarginPropsToCss } = useResponsiveCss();
+    const { cssGenerator } = useResponsiveCss();
 
     const _css = (): string => {
         return [
-            fromMarginPropsToCss({
-                margin,
-                marginBottom,
-                marginLeft,
-                marginRight,
-                marginTop,
-                marginVertical,
-                marginHorizontal
+            cssGenerator.group({
+                margin: {
+                    margin,
+                    marginBottom,
+                    marginLeft,
+                    marginRight,
+                    marginTop,
+                    marginVertical,
+                    marginHorizontal
+                },
+                padding: {
+                    padding,
+                    paddingBottom,
+                    paddingHorizontal,
+                    paddingLeft,
+                    paddingRight,
+                    paddingTop,
+                    paddingVertical
+                }
             })
         ].join("");
     }
