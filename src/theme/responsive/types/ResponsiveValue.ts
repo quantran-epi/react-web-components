@@ -1,7 +1,7 @@
 import { BreakpointType } from "./BreakpointType";
 
-type ValueType = string | number;
+export type CssValueType = string | number;
 
-export type ResponsiveValue = ValueType
-    | [ValueType, ValueType?, ValueType?, ValueType?, ValueType?]
-    | Partial<Record<BreakpointType, ValueType>>;
+export type ResponsiveValue = CssValueType
+    | [CssValueType, CssValueType?, CssValueType?, CssValueType?, CssValueType?]
+    | Partial<Record<BreakpointType, CssValueType>>;

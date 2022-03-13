@@ -1,4 +1,4 @@
-import { useResponsiveCss } from "@theme/responsive/hooks";
+import { useCss } from "@theme/responsive/hooks";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
@@ -27,12 +27,32 @@ export const useButtonStyle = ({
     paddingTop,
     paddingVertical,
 
+    _hover,
 }: IUseButtonStyleProps): IUseButtonStyle => {
-    const { cssGenerator } = useResponsiveCss();
-
+    const { cssGenerator } = useCss();
     const _css = (): string => {
         return [
             cssGenerator.group({
+                _hover: {
+                    margin: {
+                        margin: _hover.margin,
+                        marginBottom: _hover.marginBottom,
+                        marginLeft: _hover.marginLeft,
+                        marginRight: _hover.marginRight,
+                        marginTop: _hover.marginTop,
+                        marginVertical: _hover.marginVertical,
+                        marginHorizontal: _hover.marginHorizontal
+                    },
+                    padding: {
+                        padding: _hover.padding,
+                        paddingBottom: _hover.paddingBottom,
+                        paddingLeft: _hover.paddingLeft,
+                        paddingRight: _hover.paddingRight,
+                        paddingTop: _hover.paddingTop,
+                        paddingVertical: _hover.paddingVertical,
+                        paddingHorizontal: _hover.paddingHorizontal
+                    }
+                },
                 margin: {
                     margin,
                     marginBottom,
