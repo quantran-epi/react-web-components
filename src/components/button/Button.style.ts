@@ -2,8 +2,8 @@ import { useResponsiveCss } from "@theme/responsive/hooks";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
-interface IUseButtonStyleProps extends IButtonProps {
-    
+interface IUseButtonStyleProps extends Partial<IButtonProps> {
+
 }
 
 interface IUseButtonStyle extends IComponentStyleHook {
@@ -26,11 +26,11 @@ export const useButtonStyle = ({
             fromMarginPropsToCss({
                 margin,
                 marginBottom,
-                marginHorizontal,
                 marginLeft,
                 marginRight,
                 marginTop,
-                marginVertical
+                marginVertical,
+                marginHorizontal
             })
         ].join("");
     }

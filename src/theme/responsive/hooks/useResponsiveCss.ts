@@ -1,6 +1,6 @@
 import { useTheme } from '@theme/provider';
 import { IMarginProps } from "@theme/style-props";
-import { BreakpointType, ResponsiveValue } from '../types';
+import { ResponsiveValue } from '../types';
 import { useMediaQuery } from './useMediaQuery';
 
 interface IUseResponsiveCssProps {
@@ -18,7 +18,6 @@ export const useResponsiveCss = (props?: IUseResponsiveCssProps): IUseResponsive
     });
 
     const _cssProperty = (propName: string, propValue: ResponsiveValue, unit: string = 'px'): string => {
-        debugger
         if (typeof propValue === "string")
             return `${propName}: ${propValue}`;
         if (typeof propValue === "number")
@@ -61,8 +60,22 @@ export const useResponsiveCss = (props?: IUseResponsiveCssProps): IUseResponsive
             marginTop,
             marginVertical
         } = props;
+        let o = [];
+        if (margin !== undefined) o.push(_cssProperty("margin", margin));
+        if (marginHorizontal !== undefined) {
+            o.push(_cssProperty("margin-left", marginHorizontal));
+            o.push(_cssProperty("margin-right", marginHorizontal));
+        }
+        if (marginVertical !== undefined) {
+            o.push(_cssProperty("margin-top", marginVertical));
+            o.push(_cssProperty("margin-bottom", marginVertical));
+        }
+        if (marginBottom !== undefined) o.push(_cssProperty("margin-bottom", marginBottom));
+        if (marginTop !== undefined) o.push(_cssProperty("margin-top", marginTop));
+        if (marginLeft !== undefined) o.push(_cssProperty("margin-left", marginLeft));
+        if (marginRight !== undefined) o.push(_cssProperty("margin-right", marginRight));
 
-        return _cssProperty("margin", margin);
+        return o.join("");
     }
 
     return {

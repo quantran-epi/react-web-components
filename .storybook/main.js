@@ -12,15 +12,7 @@ module.exports = {
             loader: require.resolve("babel-loader"),
         });
         config.resolve.extensions.push(".ts", ".tsx");
-        config.resolve.alias = {
-            ...config.resolve?.alias,
-            // "@theme/specs/abstract$": path.resolve(__dirname, '../src/theme/specs/abstract'),
-            // "@theme/responsive$": path.resolve(__dirname, '../src/theme/responsive'),
-            // "@theme/specs/default": path.resolve(__dirname, '../src/theme/specs/default/index.ts'),
-            // "@theme/provider": path.resolve(__dirname, '../src/theme/provider/index.ts'),
-            // "@theme/style-props": path.resolve(__dirname, './src/theme/style-props/index.ts')
-        }
-
+       
         return config;
     }
 };

@@ -22,7 +22,6 @@
       "@theme/provider": ["./src/theme/provider/index"],
       "@theme/responsive/*": ["./src/theme/responsive/*"],
       "@theme/style-props": ["./src/theme/style-props/index"],
-      // "@theme/helpers/*": ["./src/theme/helpers/*"],
     }
   },
   "include": ["src", "**/*.ts"],

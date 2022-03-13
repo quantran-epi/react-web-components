@@ -4,7 +4,7 @@ import { useButtonStyle } from './Button.style';
 import { IButtonProps, IStyledButtonProps } from './Button.types';
 
 const StyledButton = styled.button<IStyledButtonProps>`
-    ${props => props.css}
+    ${props => props.componentCss}
 `
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
@@ -12,7 +12,7 @@ export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
 }, ref) => {
     const { css } = useButtonStyle(props);
 
-    return <StyledButton ref={ref} css={css}>
+    return <StyledButton ref={ref} componentCss={css}>
         {children}
     </StyledButton>
 })

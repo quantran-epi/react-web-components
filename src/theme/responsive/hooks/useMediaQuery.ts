@@ -1,5 +1,3 @@
-import { IThemeBreakpoint } from "@theme/specs/abstract/base";
-import { LiteralUnion } from "type-fest";
 import { BreakpointType, BreakpointValueObject } from "../types";
 
 interface IUseMediaQueryProps {

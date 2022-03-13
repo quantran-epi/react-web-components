@@ -1,3 +1,4 @@
+// only for story book
 {
     "presets": [
         "@babel/preset-env",
@@ -22,7 +23,7 @@
                     "@theme/specs/default": "./src/theme/specs/default/index.ts",
                     "@theme/provider": "./src/theme/provider/index.ts",
                     "@theme/responsive": "./src/theme/responsive",
-                    "@theme/style-props": "./src/theme/style-props/index.t"
+                    "@theme/style-props": "./src/theme/style-props/index.ts"
                 }
             }
         ],
@@ -30,7 +31,7 @@
         [
             "babel-plugin-styled-components",
             {
-                "displayName": false
+                "displayName": true
             }
         ]
     ]
