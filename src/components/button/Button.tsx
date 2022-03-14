@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import classNames from 'classnames';
 import { useButtonStyle } from './Button.style';
 import { IButtonProps, IStyledButtonProps } from './Button.types';
+import { ComponentClassNames } from '../base/constants';
 
 const StyledButton = styled.button<IStyledButtonProps>`
-    ${props => props.css}
+    ${props => props.componentCss}
 `
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
@@ -16,8 +18,8 @@ export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
 
     return <StyledButton
         ref={ref}
-        css={_buttonStyle.concat(style.css)}
-        className={className}
+        componentCss={_buttonStyle.concat(style.css)}
+        className={classNames(ComponentClassNames.button, className)}
         style={style}>
         {children}
     </StyledButton>

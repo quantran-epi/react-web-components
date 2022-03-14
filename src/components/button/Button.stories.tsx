@@ -21,6 +21,7 @@ export default {
 
 export const Default = () => <Button
     margin={50}
+    className="test-button"
     style={{
         color: 'red',
         css: `font-size: 24px;`
