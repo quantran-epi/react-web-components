@@ -23,7 +23,8 @@
                     "@theme/specs/default": "./src/theme/specs/default/index.ts",
                     "@theme/provider": "./src/theme/provider/index.ts",
                     "@theme/responsive": "./src/theme/responsive",
-                    "@theme/style-props": "./src/theme/style-props/index.ts"
+                    "@theme/style-props": "./src/theme/style-props/index.ts",
+                    "@theme/types": "./src/theme/types/index.ts"
                 }
             }
         ],

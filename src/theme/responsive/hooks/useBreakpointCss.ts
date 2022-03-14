@@ -1,6 +1,6 @@
 import { useTheme } from "@theme/provider";
-import { uniq } from "lodash";
-import { CssValueType, ICssResponsiveProp, PseudoSelectorType } from "../types";
+import { uniq, values } from "lodash";
+import { BreakpointType, CssValueType, ICssResponsiveProp, PseudoSelectorType } from "../types";
 import { useMediaQuery } from "./useMediaQuery";
 
 enum BreakpointGroupKeyType {
@@ -27,8 +27,8 @@ interface IUseBreakpointCss {
 }
 
 export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
-    const { theme } = useTheme();
-    const { above, between, sortKeys } = useMediaQuery({
+    const { theme } = useTheme(); console.log(theme);
+    const { above, between, only, sortKeys } = useMediaQuery({
         breakpoints: theme.breakpoint.values,
         step: theme.breakpoint.step
     });
@@ -41,13 +41,14 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         if (value instanceof Array) {
             let breakpoints = [] as string[];
             let i = 0;
-            while (i < 5) {
+            while (i < sortKeys.length) {
+                // not full array passed in, create an above media at this index
                 if (value[i] === undefined) {
                     breakpoints.push(above(sortKeys[i]));
                     break;
                 }
-
-                if (i === 4) {
+                // full array passed in
+                if (i === sortKeys.length - 1) {
                     breakpoints.push(above(sortKeys[i]));
                     break;
                 }
@@ -56,6 +57,11 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             }
             return breakpoints;
         }
+        let breakpoints = [] as string[];
+        Object.keys(value).forEach((key: BreakpointType) => {
+            if (value[key] !== undefined) breakpoints.push(only(key));
+        })
+        return breakpoints;
     }
 
     const _getUniqueBreakpoints = (props: ICssResponsiveProp[]): string[] => {
@@ -77,19 +83,23 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
                 breakpointValues: value
             }
         if (value instanceof Array) {
+            if (value.length === 0) throw new Error("ResponsiveValue cannot be an empty array");
             let breakpointValues = {} as Record<string, CssValueType>;
             let i = 0;
-            while (i < 5) {
-                if (value[i] === undefined) {
+            while (i < sortKeys.length) {
+                // undefined means not passed in, null means passed NULL in
+                if (value[i] === null) {
+                    // do nothing
+                }
+                else if (value[i] === undefined) {
                     breakpointValues[above(sortKeys[i])] = value[i - 1];
                     break;
                 }
-
-                if (i === 4) {
+                else if (i === sortKeys.length - 1) {
                     breakpointValues[above(sortKeys[i])] = value[i];
                     break;
                 }
-                breakpointValues[between(sortKeys[i], sortKeys[i + 1])] = value[i];
+                else breakpointValues[between(sortKeys[i], sortKeys[i + 1])] = value[i];
                 i++;
             }
             return {
@@ -97,6 +107,15 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
                 unit: unit,
                 breakpointValues: breakpointValues
             }
+        }
+        let breakpointValues = {} as Record<string, CssValueType>;
+        Object.keys(value).forEach((key: BreakpointType) => {
+            if (value[key] !== undefined) breakpointValues[only(key)] = value[key];
+        })
+        return {
+            propName: name,
+            unit: unit,
+            breakpointValues: breakpointValues
         }
     }
 
@@ -136,7 +155,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             .forEach(cssProp => {
                 noneBreakpointGroup.cssList.push(_getCssPropertyString(cssProp.propName, cssProp.breakpointValues as CssValueType, cssProp.unit));
             });
-        return [noneBreakpointGroup, ...breakpointGroups];
+        return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }
 
     const _getBreakpointCss = (props: ICssResponsiveProp[]): string => {

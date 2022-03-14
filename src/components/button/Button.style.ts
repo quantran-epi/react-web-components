@@ -33,7 +33,7 @@ export const useButtonStyle = ({
     const _css = (): string => {
         return [
             cssGenerator.group({
-                _hover: {
+                _hover: _hover === undefined ? undefined : {
                     margin: {
                         margin: _hover.margin,
                         marginBottom: _hover.marginBottom,
