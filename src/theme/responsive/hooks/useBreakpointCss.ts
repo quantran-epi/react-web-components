@@ -29,8 +29,8 @@ interface IUseBreakpointCss {
 export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
     const { theme } = useTheme();
     const { above, between, only, sortKeys } = useMediaQuery({
-        breakpoints: theme.breakpoint.values,
-        step: theme.breakpoint.step
+        breakpoints: theme.specs.breakpoint.values,
+        step: theme.specs.breakpoint.step
     });
 
     const _getBreakpoints = (prop: ICssResponsiveProp): string[] => {

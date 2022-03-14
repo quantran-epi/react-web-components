@@ -23,6 +23,7 @@
       "@theme/responsive/*": ["./src/theme/responsive/*"],
       "@theme/style-props": ["./src/theme/style-props/index"],
       "@theme/types": ["./src/theme/types/index"],
+      "@theme/functions": ["./src/theme/functions/index"]
     }
   },
   "include": ["src", "**/*.ts"],
