@@ -1,6 +1,6 @@
 import { useTheme } from "@theme/provider";
-import { uniq, values } from "lodash";
-import { BreakpointType, CssValueType, ICssResponsiveProp, PseudoSelectorType } from "../types";
+import { uniq } from "lodash";
+import { BreakpointType, ICssResponsiveProp, PseudoSelectorType } from "../types";
 import { useMediaQuery } from "./useMediaQuery";
 
 enum BreakpointGroupKeyType {
@@ -10,7 +10,7 @@ enum BreakpointGroupKeyType {
 interface ICssPropBreakpointValue {
     propName: string;
     unit: string;
-    breakpointValues?: Record<string, CssValueType> | CssValueType;
+    breakpointValues?: Record<string, string | number> | string | number;
 }
 
 interface ICssBreakpointGroup {
@@ -27,7 +27,7 @@ interface IUseBreakpointCss {
 }
 
 export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
-    const { theme } = useTheme(); console.log(theme);
+    const { theme } = useTheme();
     const { above, between, only, sortKeys } = useMediaQuery({
         breakpoints: theme.breakpoint.values,
         step: theme.breakpoint.step
@@ -84,7 +84,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             }
         if (value instanceof Array) {
             if (value.length === 0) throw new Error("ResponsiveValue cannot be an empty array");
-            let breakpointValues = {} as Record<string, CssValueType>;
+            let breakpointValues = {} as Record<string, string | number>;
             let i = 0;
             while (i < sortKeys.length) {
                 // undefined means not passed in, null means passed NULL in
@@ -108,7 +108,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
                 breakpointValues: breakpointValues
             }
         }
-        let breakpointValues = {} as Record<string, CssValueType>;
+        let breakpointValues = {} as Record<string, string | number>;
         Object.keys(value).forEach((key: BreakpointType) => {
             if (value[key] !== undefined) breakpointValues[only(key)] = value[key];
         })
@@ -124,7 +124,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         return props.map(prop => _getCssPropsBreakpointValue(prop));
     }
 
-    const _getCssPropertyString = (propName: string, propValue: CssValueType, unit: string = "px") => {
+    const _getCssPropertyString = (propName: string, propValue: string | number, unit: string = "px") => {
         return typeof propValue === "string" ? `${propName}:${propValue};`
             : `${propName}:${propValue}${unit};`;
     }
@@ -153,7 +153,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             .filter(cssProp => typeof cssProp.breakpointValues === "string" ||
                 typeof cssProp.breakpointValues === "number")
             .forEach(cssProp => {
-                noneBreakpointGroup.cssList.push(_getCssPropertyString(cssProp.propName, cssProp.breakpointValues as CssValueType, cssProp.unit));
+                noneBreakpointGroup.cssList.push(_getCssPropertyString(cssProp.propName, cssProp.breakpointValues as string | number, cssProp.unit));
             });
         return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }

@@ -1,3 +1,3 @@
 export interface IStyledComponentProps {
-    componentCss?: string;
+    css?: string;
 }

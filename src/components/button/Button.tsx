@@ -1,11 +1,10 @@
-import { createTheme } from '@theme/provider';
 import React from 'react';
 import styled from 'styled-components';
 import { useButtonStyle } from './Button.style';
 import { IButtonProps, IStyledButtonProps } from './Button.types';
 
 const StyledButton = styled.button<IStyledButtonProps>`
-    ${props => props.componentCss}
+    ${props => props.css}
 `
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
@@ -13,11 +12,11 @@ export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     className,
     ...props
 }, ref) => {
-    const { css } = useButtonStyle(props);
+    const { css: _buttonStyle } = useButtonStyle(props);
 
     return <StyledButton
         ref={ref}
-        componentCss={css}
+        css={_buttonStyle.concat(style.css)}
         className={className}
         style={style}>
         {children}

@@ -84,7 +84,7 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
         if (params._hover?.margin !== undefined) _hoverCssProps.push(..._getMarginCssResponsiveProps(params._hover.margin));
         if (params._hover?.padding !== undefined) _hoverCssProps.push(..._getPaddingCssResponsiveProps(params._hover.padding));
         return getBreakpointCss(_normalCssProps)
-            .concat(getBreakpointCssWithPseudo(_hoverCssProps, ":hover"));
+            .concat(getBreakpointCssWithPseudo(_hoverCssProps, ":hover")) || "";
     }
 
     return {

@@ -11,20 +11,20 @@ export const parameters = {
     },
 };
 
-const theme = createTheme(specs => ({
-    breakpoint: {
-        values: {
-            mobile: 0,
-            tablet: 768,
-            desktop: 1000
-        }
-    }
-}))
-console.log("create theme", theme);
+// const theme = createTheme(specs => ({
+//     breakpoint: {
+//         values: {
+//             mobile: 0,
+//             tablet: 768,
+//             desktop: 1000
+//         }
+//     }
+// }))
+// console.log("create theme", theme);
 
 export const decorators = [
     (Story) => (
-        <ThemeProvider value={theme}>
+        <ThemeProvider>
             <Story />
         </ThemeProvider>
     ),

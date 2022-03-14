@@ -1,4 +1,4 @@
-import { IThemeButton, ButtonType, ButtonColor, ButtonShape, ButtonSize } from "@theme/specs/abstract/components";
+import { IThemeButton } from "@theme/specs/abstract/components";
 import { ThemeColor } from "../ThemeColor";
 import { ThemeFontSize } from "../ThemeFontSize";
 import { ThemeShadow } from "../ThemeShadow";

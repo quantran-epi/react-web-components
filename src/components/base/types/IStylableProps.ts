@@ -1,4 +1,6 @@
 export interface IStylableProps {
     className?: string;
-    style?: React.CSSProperties;
+    style?: React.CSSProperties & {
+        css?: string;
+    };
 }
