@@ -17,7 +17,7 @@ export interface IButtonProps
     & ISystemOverrideProps> {
     children: React.ReactNode;
     size?: ResponsiveValue<ButtonSize>;
-    color?: LiteralUnion<ButtonColor, string>;
+    color?: ResponsiveValue<LiteralUnion<ButtonColor, string>>;
     shape?: ButtonShape;
     type?: ButtonType;
 }

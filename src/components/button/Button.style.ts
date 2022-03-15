@@ -1,5 +1,7 @@
 import { useTheme } from "@theme/provider";
-import { useBreakpointCss, useComponentBaseCss } from "@theme/responsive/hooks";
+import { useBreakpointCss, useComponentBaseCss, useCssProperty, useResponsiveValue } from "@theme/responsive/hooks";
+import { ICssResponsiveProp } from "@theme/responsive/types";
+import { ButtonSize } from "@theme/specs/abstract/components";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
@@ -38,36 +40,26 @@ export const useButtonStyle = ({
     sx
 }: IUseButtonStyleProps): IUseButtonStyle => {
     const ComponentBaseCss = useComponentBaseCss();
+    const ResponsiveValue = useResponsiveValue();
+    const BreakpointCss = useBreakpointCss();
     const { theme } = useTheme();
 
-    // const _size = (): string => {
-        
-    // }
-
-    const _typeCss = (): string => {
-        let _buttonColor = theme.functions.color.resolve(color);
-        switch (type) {
-            case "filled": return `
-                background-color: ${_buttonColor};
-            `;
-            case "dashed": return `
-                border-style: dashed;
-                border-color: ${_buttonColor};
-            `;
-            case "link": return `
-                background-color: transparent;
-                color: ${_buttonColor};
-            `;
-            case "outlined": return `
-                background-color: transparent;
-                color: ${_buttonColor};
-                border-color: ${_buttonColor};
-            `;
-            case "text": return `
-                background-color: transparent;
-                color: ${_buttonColor};
-            `;
-        }
+    const _size = (): string => {
+        let cssResponsiveProps = ResponsiveValue.Union.getResponsiveProps(size, {
+            sm: [
+                { name: "padding", value: theme.specs.components.button.size.sm.padding },
+                { name: "font-size", value: theme.specs.components.button.size.sm.fontSize }
+            ],
+            md: [
+                { name: "padding", value: theme.specs.components.button.size.md.padding },
+                { name: "font-size", value: theme.specs.components.button.size.md.fontSize }
+            ],
+            lg: [
+                { name: "padding", value: theme.specs.components.button.size.lg.padding },
+                { name: "font-size", value: theme.specs.components.button.size.lg.fontSize }
+            ]
+        });
+        return BreakpointCss.fromProps(cssResponsiveProps);
     }
 
     const _css = (): string => {
@@ -118,7 +110,9 @@ export const useButtonStyle = ({
             }
         })
 
-        return cssFromCssProps.concat(cssFromCssString);
+        return cssFromCssProps
+            .concat(_size())
+            .concat(cssFromCssString);
     }
 
     return {

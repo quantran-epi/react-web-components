@@ -22,7 +22,6 @@ export default {
 export const Default = () => <Button
     margin={50}
     marginTop={{ xs: 100, md: 50, lg: 200 }}
-    padding={[10, 20, 30]}
     _hover={{
         paddingTop: 100,
         paddingBottom: [50, 40],
