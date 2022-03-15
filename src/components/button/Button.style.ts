@@ -1,5 +1,5 @@
 import { useTheme } from "@theme/provider";
-import { useCss } from "@theme/responsive/hooks";
+import { useBreakpointCss, useComponentBaseCss } from "@theme/responsive/hooks";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
@@ -37,8 +37,12 @@ export const useButtonStyle = ({
 
     sx
 }: IUseButtonStyleProps): IUseButtonStyle => {
-    const { fromProps, fromCssString } = useCss();
+    const ComponentBaseCss = useComponentBaseCss();
     const { theme } = useTheme();
+
+    // const _size = (): string => {
+        
+    // }
 
     const _typeCss = (): string => {
         let _buttonColor = theme.functions.color.resolve(color);
@@ -67,13 +71,13 @@ export const useButtonStyle = ({
     }
 
     const _css = (): string => {
-        let cssFromCssString = fromCssString.get({
+        let cssFromCssString = ComponentBaseCss.fromString({
             _hover: (_hover === undefined || _hover.sx === undefined) ? undefined : {
                 css: _hover.sx.css
             },
             css: sx?.css
         });
-        let cssFromCssProps = fromProps.group({
+        let cssFromCssProps = ComponentBaseCss.fromProps.group({
             _hover: _hover === undefined ? undefined : {
                 margin: {
                     margin: _hover.margin,

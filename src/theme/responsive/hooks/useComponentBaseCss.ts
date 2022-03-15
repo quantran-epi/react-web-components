@@ -2,16 +2,16 @@ import { IMarginProps, IPaddingProps } from "@theme/style-props";
 import { ICssPropsGenerator, ICssPropsGeneratorGroupParams, ICssResponsiveProp, ICssStringGenerator, ICssStringGeneratorParams, PseudoSelectorType, ResponsiveValue } from '../types';
 import { useBreakpointCss } from "./useBreakpointCss";
 
-interface IUseCssProps {
+interface IUseComponentBaseCssProps {
 }
 
-interface IUseCss {
+interface IUseComponentBaseCss {
     fromProps: ICssPropsGenerator;
-    fromCssString: ICssStringGenerator;
+    fromString: ICssStringGenerator;
 }
 
-export const useCss = (props?: IUseCssProps): IUseCss => {
-    const { getCssFromCssProps, getCssFromCssString } = useBreakpointCss();
+export const useComponentBaseCss = (props?: IUseComponentBaseCssProps): IUseComponentBaseCss => {
+    const BreakpointCss = useBreakpointCss();
 
     const _getMarginCssResponsiveProps = (props: IMarginProps): ICssResponsiveProp[] => {
         let {
@@ -68,11 +68,11 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
     }
 
     const margin = (props: IMarginProps, pseudo?: PseudoSelectorType) => {
-        return getCssFromCssProps(_getMarginCssResponsiveProps(props), pseudo);
+        return BreakpointCss.fromProps(_getMarginCssResponsiveProps(props), pseudo);
     }
 
     const padding = (props: IPaddingProps, pseudo?: PseudoSelectorType) => {
-        return getCssFromCssProps(_getPaddingCssResponsiveProps(props), pseudo);
+        return BreakpointCss.fromProps(_getPaddingCssResponsiveProps(props), pseudo);
     }
 
     const group = (params: ICssPropsGeneratorGroupParams): string => {
@@ -84,14 +84,14 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
 
         if (params._hover?.margin !== undefined) _hoverCssProps.push(..._getMarginCssResponsiveProps(params._hover.margin));
         if (params._hover?.padding !== undefined) _hoverCssProps.push(..._getPaddingCssResponsiveProps(params._hover.padding));
-        return getCssFromCssProps(_normalCssProps).concat(getCssFromCssProps(_hoverCssProps, ":hover")) || "";
+        return BreakpointCss.fromProps(_normalCssProps).concat(BreakpointCss.fromProps(_hoverCssProps, ":hover"));
     }
 
     const fromCssString = (params: ICssStringGeneratorParams): string => {
         let _normalCss = "";
         let _hoverCss = "";
-        if (params.css !== undefined) _normalCss = getCssFromCssString(params.css);
-        if (params._hover?.css !== undefined) _hoverCss = getCssFromCssString(params._hover.css, ":hover");
+        if (params.css !== undefined) _normalCss = BreakpointCss.fromString(params.css);
+        if (params._hover?.css !== undefined) _hoverCss = BreakpointCss.fromString(params._hover.css, ":hover");
 
         return _normalCss.concat(_hoverCss);
     }
@@ -102,8 +102,6 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
             padding,
             group
         },
-        fromCssString: {
-            get: fromCssString
-        }
+        fromString: fromCssString
     }
 }

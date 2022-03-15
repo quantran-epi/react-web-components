@@ -1,0 +1,1 @@
+export type BreakpointValues<T> = Record<string, T>;

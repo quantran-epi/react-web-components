@@ -1,7 +1,9 @@
 import { useTheme } from "@theme/provider";
-import { uniq, values } from "lodash";
-import { BreakpointType, ICssResponsiveProp, PseudoSelectorType, ResponsiveValue } from "../types";
+import { uniq } from "lodash";
+import { BreakpointType, BreakpointValues, ICssResponsiveProp, PseudoSelectorType, ResponsiveValue } from "../types";
+import { useCssProperty } from "./useCssProperty";
 import { useMediaQuery } from "./useMediaQuery";
+import { useResponsiveValue } from "./useResponsiveValue";
 
 enum BreakpointGroupKeyType {
     None = "1",
@@ -10,7 +12,7 @@ enum BreakpointGroupKeyType {
 interface ICssPropBreakpointValue {
     propName: string;
     unit: string;
-    breakpointValues?: Record<string, string | number> | string | number;
+    breakpointValues?: Record<string, string> | string;
 }
 
 interface ICssBreakpointGroup {
@@ -22,8 +24,8 @@ interface IUseBreakpointCssProps {
 }
 
 interface IUseBreakpointCss {
-    getCssFromCssProps: (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType) => string;
-    getCssFromCssString: (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType) => string;
+    fromProps: (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType) => string;
+    fromString: (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType) => string;
 }
 
 export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
@@ -32,39 +34,8 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         breakpoints: theme.specs.breakpoint.values,
         step: theme.specs.breakpoint.step
     });
-
-    const _getBreakpointValuesFromResponsiveValue = (value: ResponsiveValue, unit = "px")
-        : string | number | Record<string, string | number> => {
-        if (typeof value === "number") return value.toString().concat(unit);
-        if (typeof value === "string") return value;
-        if (value instanceof Array) {
-            if (value.length === 0) throw new Error("ResponsiveValue cannot be an empty array");
-            let breakpointValues = {} as Record<string, string | number>;
-            let i = 0;
-            while (i < sortKeys.length) {
-                // undefined means not passed in, null means passed NULL in
-                if (value[i] === null) {
-                    // do nothing
-                }
-                else if (value[i] === undefined) {
-                    breakpointValues[above(sortKeys[i])] = value[i - 1];
-                    break;
-                }
-                else if (i === sortKeys.length - 1) {
-                    breakpointValues[above(sortKeys[i])] = value[i];
-                    break;
-                }
-                else breakpointValues[between(sortKeys[i], sortKeys[i + 1])] = value[i];
-                i++;
-            }
-            return breakpointValues;
-        }
-        let breakpointValues = {} as Record<string, string | number>;
-        Object.keys(value).forEach((key: BreakpointType) => {
-            if (value[key] !== undefined) breakpointValues[only(key)] = value[key];
-        })
-        return breakpointValues;
-    }
+    const CssProperty = useCssProperty();
+    const ResponsiveValue = useResponsiveValue();
 
     const _getBreakpoints = (prop: ICssResponsiveProp): string[] => {
         let { value } = prop;
@@ -112,18 +83,14 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         return {
             propName: name,
             unit: unit,
-            breakpointValues: _getBreakpointValuesFromResponsiveValue(value, unit)
+            breakpointValues: ResponsiveValue.transformBreakpointValues(ResponsiveValue
+                .getBreakpointValues(value), (value) => CssProperty.getValueWithUnit(value, unit))
         }
     }
 
     // get list css prop with breakpoint values from ICssProp[]
     const _getListCssPropBreakpointValue = (props: ICssResponsiveProp[]): ICssPropBreakpointValue[] => {
         return props.map(prop => _getCssPropsBreakpointValue(prop));
-    }
-
-    const _getCssPropertyString = (propName: string, propValue: string | number, unit: string = "px") => {
-        return typeof propValue === "string" ? `${propName}:${propValue};`
-            : `${propName}:${propValue}${unit};`;
     }
 
     const _getCssBreakpointGroups = (props: ICssResponsiveProp[]): ICssBreakpointGroup[] => {
@@ -137,7 +104,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         listCssPropBreakpointValue.forEach(cssProp => {
             breakpointGroups.forEach(breakpointGroup => {
                 if (cssProp.breakpointValues[breakpointGroup.breakpoint] !== undefined)
-                    breakpointGroup.cssList.push(_getCssPropertyString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint], cssProp.unit));
+                    breakpointGroup.cssList.push(CssProperty.getString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint]));
             })
         })
 
@@ -150,7 +117,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             .filter(cssProp => typeof cssProp.breakpointValues === "string" ||
                 typeof cssProp.breakpointValues === "number")
             .forEach(cssProp => {
-                noneBreakpointGroup.cssList.push(_getCssPropertyString(cssProp.propName, cssProp.breakpointValues as string | number, cssProp.unit));
+                noneBreakpointGroup.cssList.push(CssProperty.getString(cssProp.propName, cssProp.breakpointValues as string));
             });
         return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }
@@ -169,21 +136,25 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
                         ${group.cssList.join("")}
                     }`}
             }`
-        }).join("");
+        }).join("") || "";
     }
 
     const _getCssFromCssString = (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType): string => {
-        let breakpointValues = _getBreakpointValuesFromResponsiveValue(cssString);
+        let breakpointValues = ResponsiveValue.getBreakpointValues(cssString);
+        if (typeof cssString === "string") return breakpointValues as string;
         return Object.keys(breakpointValues).map(breakpoint => `
-            ${breakpoint}: {
-                ${breakpointValues[breakpoint]}
+            ${breakpoint} {
+                ${pseudo === undefined ? breakpointValues[breakpoint] :
+                `${pseudo} {
+                    ${breakpointValues[breakpoint]}
+                }` }
             }
-        `).join("");
+        `).join("") || "";
     }
 
 
     return {
-        getCssFromCssProps: _getCssFromCssProps,
-        getCssFromCssString: _getCssFromCssString
+        fromProps: _getCssFromCssProps,
+        fromString: _getCssFromCssString,
     }
 }

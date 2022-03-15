@@ -26,6 +26,12 @@ export const Default = () => <Button
     _hover={{
         paddingTop: 100,
         paddingBottom: [50, 40],
-        paddingLeft: { md: 100, lg: 200 }
+        paddingLeft: { md: 100, lg: 200 },
+        sx: {
+            css: { sm: 'color: green;' }
+        }
+    }}
+    sx={{
+        css: ['color: red;', 'color: blue;']
     }}
 > Button</Button>

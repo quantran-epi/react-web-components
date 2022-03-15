@@ -1,3 +1,4 @@
+import { ResponsiveValue } from "@theme/responsive/types";
 import { ButtonColor, ButtonShape, ButtonSize, ButtonType } from "@theme/specs/abstract/components";
 import { IBorderProps, IClassNameProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props";
 import { LiteralUnion } from "type-fest";
@@ -15,7 +16,7 @@ export interface IButtonProps
     & IBorderProps
     & ISystemOverrideProps> {
     children: React.ReactNode;
-    size?: ButtonSize;
+    size?: ResponsiveValue<ButtonSize>;
     color?: LiteralUnion<ButtonColor, string>;
     shape?: ButtonShape;
     type?: ButtonType;

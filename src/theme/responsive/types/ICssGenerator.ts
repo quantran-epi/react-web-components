@@ -28,6 +28,4 @@ export interface ICssStringGeneratorParams {
     }
 }
 
-export interface ICssStringGenerator {
-    get: (params: ICssStringGeneratorParams) => string;
-}
+export type ICssStringGenerator = (params: ICssStringGeneratorParams) => string;
