@@ -1,6 +1,6 @@
 import { useTheme } from "@theme/provider";
-import { uniq } from "lodash";
-import { BreakpointType, ICssResponsiveProp, PseudoSelectorType } from "../types";
+import { uniq, values } from "lodash";
+import { BreakpointType, ICssResponsiveProp, PseudoSelectorType, ResponsiveValue } from "../types";
 import { useMediaQuery } from "./useMediaQuery";
 
 enum BreakpointGroupKeyType {
@@ -22,8 +22,8 @@ interface IUseBreakpointCssProps {
 }
 
 interface IUseBreakpointCss {
-    getBreakpointCss: (props: ICssResponsiveProp[]) => string;
-    getBreakpointCssWithPseudo: (props: ICssResponsiveProp[], pseudo: PseudoSelectorType) => string;
+    getCssFromCssProps: (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType) => string;
+    getCssFromCssString: (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType) => string;
 }
 
 export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
@@ -32,6 +32,39 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         breakpoints: theme.specs.breakpoint.values,
         step: theme.specs.breakpoint.step
     });
+
+    const _getBreakpointValuesFromResponsiveValue = (value: ResponsiveValue, unit = "px")
+        : string | number | Record<string, string | number> => {
+        if (typeof value === "number") return value.toString().concat(unit);
+        if (typeof value === "string") return value;
+        if (value instanceof Array) {
+            if (value.length === 0) throw new Error("ResponsiveValue cannot be an empty array");
+            let breakpointValues = {} as Record<string, string | number>;
+            let i = 0;
+            while (i < sortKeys.length) {
+                // undefined means not passed in, null means passed NULL in
+                if (value[i] === null) {
+                    // do nothing
+                }
+                else if (value[i] === undefined) {
+                    breakpointValues[above(sortKeys[i])] = value[i - 1];
+                    break;
+                }
+                else if (i === sortKeys.length - 1) {
+                    breakpointValues[above(sortKeys[i])] = value[i];
+                    break;
+                }
+                else breakpointValues[between(sortKeys[i], sortKeys[i + 1])] = value[i];
+                i++;
+            }
+            return breakpointValues;
+        }
+        let breakpointValues = {} as Record<string, string | number>;
+        Object.keys(value).forEach((key: BreakpointType) => {
+            if (value[key] !== undefined) breakpointValues[only(key)] = value[key];
+        })
+        return breakpointValues;
+    }
 
     const _getBreakpoints = (prop: ICssResponsiveProp): string[] => {
         let { value } = prop;
@@ -76,46 +109,10 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
     // get single css prop breakpoint value from a single ICssProp
     const _getCssPropsBreakpointValue = (prop: ICssResponsiveProp): ICssPropBreakpointValue => {
         let { name, value, unit } = prop;
-        if (typeof value === "string" || typeof value === "number")
-            return {
-                propName: name,
-                unit: unit,
-                breakpointValues: value
-            }
-        if (value instanceof Array) {
-            if (value.length === 0) throw new Error("ResponsiveValue cannot be an empty array");
-            let breakpointValues = {} as Record<string, string | number>;
-            let i = 0;
-            while (i < sortKeys.length) {
-                // undefined means not passed in, null means passed NULL in
-                if (value[i] === null) {
-                    // do nothing
-                }
-                else if (value[i] === undefined) {
-                    breakpointValues[above(sortKeys[i])] = value[i - 1];
-                    break;
-                }
-                else if (i === sortKeys.length - 1) {
-                    breakpointValues[above(sortKeys[i])] = value[i];
-                    break;
-                }
-                else breakpointValues[between(sortKeys[i], sortKeys[i + 1])] = value[i];
-                i++;
-            }
-            return {
-                propName: name,
-                unit: unit,
-                breakpointValues: breakpointValues
-            }
-        }
-        let breakpointValues = {} as Record<string, string | number>;
-        Object.keys(value).forEach((key: BreakpointType) => {
-            if (value[key] !== undefined) breakpointValues[only(key)] = value[key];
-        })
         return {
             propName: name,
             unit: unit,
-            breakpointValues: breakpointValues
+            breakpointValues: _getBreakpointValuesFromResponsiveValue(value, unit)
         }
     }
 
@@ -158,35 +155,35 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }
 
-    const _getBreakpointCss = (props: ICssResponsiveProp[]): string => {
+    const _getCssFromCssProps = (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType): string => {
         let breakpointGroups = _getCssBreakpointGroups(props);
         return breakpointGroups.map(group => {
             if (group.breakpoint === BreakpointGroupKeyType.None)
-                return group.cssList.join("");
+                return pseudo === undefined ? group.cssList.join("") :
+                    `${pseudo} {
+                        ${group.cssList.join("")}
+                    }`;
             return `${group.breakpoint} {
-                ${group.cssList.join("")}
+                ${pseudo === undefined ? group.cssList.join("") :
+                    `${pseudo} {
+                        ${group.cssList.join("")}
+                    }`}
             }`
         }).join("");
     }
 
-    const _getBreakpointCssWithPseudo = (props: ICssResponsiveProp[], pseudo: PseudoSelectorType): string => {
-        let breakpointGroups = _getCssBreakpointGroups(props);
-        return breakpointGroups.map(group => {
-            if (group.breakpoint === BreakpointGroupKeyType.None)
-                return `${pseudo} {
-                    ${group.cssList.join("")}
-                }`;
-            return `${group.breakpoint} {
-                ${pseudo} {
-                    ${group.cssList.join("")}
-                }
-            }`
-        }).join("");
+    const _getCssFromCssString = (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType): string => {
+        let breakpointValues = _getBreakpointValuesFromResponsiveValue(cssString);
+        return Object.keys(breakpointValues).map(breakpoint => `
+            ${breakpoint}: {
+                ${breakpointValues[breakpoint]}
+            }
+        `).join("");
     }
 
 
     return {
-        getBreakpointCss: _getBreakpointCss,
-        getBreakpointCssWithPseudo: _getBreakpointCssWithPseudo
+        getCssFromCssProps: _getCssFromCssProps,
+        getCssFromCssString: _getCssFromCssString
     }
 }

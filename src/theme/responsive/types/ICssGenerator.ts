@@ -1,19 +1,33 @@
+import { ResponsiveValue } from '@theme/responsive/types';
 import { IMarginProps, IPaddingProps } from "@theme/style-props";
 import { PseudoSelectorType } from "./PseudoSelectorType";
 
-export interface ICssGeneratorGroupItemCollection {
+export interface ICssPropsGeneratorGroupItemCollection {
     margin?: IMarginProps;
     padding?: IPaddingProps;
 }
 
-export interface ICssGeneratorGroupParams extends ICssGeneratorGroupItemCollection {
-    _hover?: ICssGeneratorGroupItemCollection;
+export interface ICssPropsGeneratorGroupParams extends ICssPropsGeneratorGroupItemCollection {
+    _hover?: ICssPropsGeneratorGroupItemCollection;
 }
 
-export type ICssGeneratorGroupItemFunctionCollection = {
-    [key in keyof ICssGeneratorGroupItemCollection]: (props: ICssGeneratorGroupItemCollection[key], pseudo?: PseudoSelectorType) => string;
+export type ICssPropsGeneratorGroupItemFunctionCollection = {
+    [key in keyof ICssPropsGeneratorGroupItemCollection]: (props: ICssPropsGeneratorGroupItemCollection[key], pseudo?: PseudoSelectorType) => string;
 }
 
-export interface ICssGenerator extends ICssGeneratorGroupItemFunctionCollection {
-    group: (params: ICssGeneratorGroupParams) => string;
+export interface ICssPropsGenerator extends ICssPropsGeneratorGroupItemFunctionCollection {
+    group: (params: ICssPropsGeneratorGroupParams) => string;
+}
+
+
+// css string generator
+export interface ICssStringGeneratorParams {
+    css?: ResponsiveValue<string>;
+    _hover?: {
+        css?: ResponsiveValue<string>;
+    }
+}
+
+export interface ICssStringGenerator {
+    get: (params: ICssStringGeneratorParams) => string;
 }

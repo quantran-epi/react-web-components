@@ -1,16 +1,17 @@
 import { IMarginProps, IPaddingProps } from "@theme/style-props";
-import { ICssGenerator, ICssGeneratorGroupParams, ICssResponsiveProp, PseudoSelectorType } from '../types';
+import { ICssPropsGenerator, ICssPropsGeneratorGroupParams, ICssResponsiveProp, ICssStringGenerator, ICssStringGeneratorParams, PseudoSelectorType, ResponsiveValue } from '../types';
 import { useBreakpointCss } from "./useBreakpointCss";
 
 interface IUseCssProps {
 }
 
 interface IUseCss {
-    cssGenerator: ICssGenerator;
+    fromProps: ICssPropsGenerator;
+    fromCssString: ICssStringGenerator;
 }
 
 export const useCss = (props?: IUseCssProps): IUseCss => {
-    const { getBreakpointCss, getBreakpointCssWithPseudo } = useBreakpointCss();
+    const { getCssFromCssProps, getCssFromCssString } = useBreakpointCss();
 
     const _getMarginCssResponsiveProps = (props: IMarginProps): ICssResponsiveProp[] => {
         let {
@@ -67,14 +68,14 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
     }
 
     const margin = (props: IMarginProps, pseudo?: PseudoSelectorType) => {
-        return getBreakpointCss(_getMarginCssResponsiveProps(props));
+        return getCssFromCssProps(_getMarginCssResponsiveProps(props), pseudo);
     }
 
     const padding = (props: IPaddingProps, pseudo?: PseudoSelectorType) => {
-        return getBreakpointCss(_getPaddingCssResponsiveProps(props));
+        return getCssFromCssProps(_getPaddingCssResponsiveProps(props), pseudo);
     }
 
-    const group = (params: ICssGeneratorGroupParams): string => {
+    const group = (params: ICssPropsGeneratorGroupParams): string => {
         let _normalCssProps: ICssResponsiveProp[] = [];
         let _hoverCssProps: ICssResponsiveProp[] = [];
 
@@ -83,15 +84,26 @@ export const useCss = (props?: IUseCssProps): IUseCss => {
 
         if (params._hover?.margin !== undefined) _hoverCssProps.push(..._getMarginCssResponsiveProps(params._hover.margin));
         if (params._hover?.padding !== undefined) _hoverCssProps.push(..._getPaddingCssResponsiveProps(params._hover.padding));
-        return getBreakpointCss(_normalCssProps)
-            .concat(getBreakpointCssWithPseudo(_hoverCssProps, ":hover")) || "";
+        return getCssFromCssProps(_normalCssProps).concat(getCssFromCssProps(_hoverCssProps, ":hover")) || "";
+    }
+
+    const fromCssString = (params: ICssStringGeneratorParams): string => {
+        let _normalCss = "";
+        let _hoverCss = "";
+        if (params.css !== undefined) _normalCss = getCssFromCssString(params.css);
+        if (params._hover?.css !== undefined) _hoverCss = getCssFromCssString(params._hover.css, ":hover");
+
+        return _normalCss.concat(_hoverCss);
     }
 
     return {
-        cssGenerator: {
+        fromProps: {
             margin,
             padding,
             group
+        },
+        fromCssString: {
+            get: fromCssString
         }
     }
 }

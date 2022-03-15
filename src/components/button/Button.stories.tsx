@@ -21,8 +21,11 @@ export default {
 
 export const Default = () => <Button
     margin={50}
-    className="test-button"
-    style={{
-        color: 'red',
-        css: `font-size: 24px;`
-    }} > Button</Button >
+    marginTop={{ xs: 100, md: 50, lg: 200 }}
+    padding={[10, 20, 30]}
+    _hover={{
+        paddingTop: 100,
+        paddingBottom: [50, 40],
+        paddingLeft: { md: 100, lg: 200 }
+    }}
+> Button</Button>

@@ -10,18 +10,15 @@ const StyledButton = styled.button<IStyledButtonProps>`
 `
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
-    style,
     className,
     ...props
 }, ref) => {
-    const { css, ...otherStyle } = style;
-    const { css: _buttonStyle } = useButtonStyle(props);
+    const { css: _buttonCss } = useButtonStyle(props);
 
     return <StyledButton
         ref={ref}
-        componentCss={_buttonStyle.concat(css)}
-        className={classNames(ComponentClassNames.button, className)}
-        style={otherStyle}>
+        componentCss={_buttonCss}
+        className={classNames(ComponentClassNames.button, className)}>
         {children}
     </StyledButton>
 })
