@@ -22,15 +22,8 @@ export default {
 export const Default = () => <Button
     margin={50}
     marginTop={{ xs: 100, md: 50, lg: 200 }}
-    _hover={{
-        paddingTop: 100,
-        paddingBottom: [50, 40],
-        paddingLeft: { md: 100, lg: 200 },
-        sx: {
-            css: { sm: 'color: green;' }
-        }
-    }}
-    sx={{
-        css: ['color: red;', 'color: blue;']
-    }}
-> Button</Button>
+    shape={["rounded", "circle", "normal"]}
+    href="test href"
+    onClick={() => {alert('dada')}}
+    title="button title"
+    id="button_id"> Button</Button>

@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
+import { ComponentClassNames } from '../base/constants';
+import { usePropResolution } from '../base/hooks';
 import { useButtonStyle } from './Button.style';
 import { IButtonProps, IStyledButtonProps } from './Button.types';
-import { ComponentClassNames } from '../base/constants';
 
 const StyledButton = styled.button<IStyledButtonProps>`
     ${props => props.componentCss}
@@ -11,14 +12,40 @@ const StyledButton = styled.button<IStyledButtonProps>`
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
     className,
+    size,
+    color,
+    shape,
+    type,
+
+    htmlType,
+    onClick,
+    href,
+    target,
     ...props
 }, ref) => {
-    const { css: _buttonCss } = useButtonStyle(props);
+    const { getStyleProps, omitProps } = usePropResolution();
+    const styleProps = getStyleProps(props);
+    const nativeProps = omitProps(props, styleProps);
+    const { css: _buttonCss } = useButtonStyle({
+        size,
+        color,
+        shape,
+        type,
+        ...styleProps
+    });
+
+    const _handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (!onClick) return;
+        if (!(onClick instanceof Function)) console.warn("onClick should be a function");
+        onClick(e);
+    }, [])
 
     return <StyledButton
         ref={ref}
         componentCss={_buttonCss}
-        className={classNames(ComponentClassNames.button, className)}>
+        className={classNames(ComponentClassNames.button, className)}
+        onClick={_handleClick}
+        {...nativeProps}>
         {children}
     </StyledButton>
 })

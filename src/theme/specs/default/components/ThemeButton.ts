@@ -29,7 +29,7 @@ export const ThemeButton: IThemeButton = {
     },
     shape: {
         normal: { radius: 5 },
-        rounded: { radius: "20%" },
+        rounded: { radius: "33%" },
         circle: { radius: "50%" }
     },
     shadow: ThemeShadow[3]

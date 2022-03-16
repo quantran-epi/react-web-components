@@ -1,11 +1,9 @@
 import { useTheme } from "@theme/provider";
-import { useBreakpointCss, useComponentBaseCss, useCssProperty, useResponsiveValue } from "@theme/responsive/hooks";
-import { ICssResponsiveProp } from "@theme/responsive/types";
-import { ButtonSize } from "@theme/specs/abstract/components";
+import { useBreakpointCss, useComponentBaseCss, useResponsiveValue } from "@theme/responsive/hooks";
 import { IComponentStyleHook } from "../base/types";
-import { IButtonProps } from "./Button.types";
+import { IButtonStyleProps } from "./Button.types";
 
-interface IUseButtonStyleProps extends Partial<IButtonProps> {
+interface IUseButtonStyleProps extends Partial<IButtonStyleProps> {
 
 }
 
@@ -30,6 +28,15 @@ export const useButtonStyle = ({
     paddingTop,
     paddingVertical,
 
+    border,
+    borderBottomWidth,
+    borderColor,
+    borderLeftWidth,
+    borderRightWidth,
+    borderStyle,
+    borderTopWidth,
+    borderWidth,
+
     _hover,
 
     color = "primary",
@@ -44,8 +51,12 @@ export const useButtonStyle = ({
     const BreakpointCss = useBreakpointCss();
     const { theme } = useTheme();
 
+    const _type = (): string => {
+        return "";
+    }
+
     const _size = (): string => {
-        let cssResponsiveProps = ResponsiveValue.Union.getResponsiveProps(size, {
+        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(size, {
             sm: [
                 { name: "padding", value: theme.specs.components.button.size.sm.padding },
                 { name: "font-size", value: theme.specs.components.button.size.sm.fontSize }
@@ -58,8 +69,15 @@ export const useButtonStyle = ({
                 { name: "padding", value: theme.specs.components.button.size.lg.padding },
                 { name: "font-size", value: theme.specs.components.button.size.lg.fontSize }
             ]
-        });
-        return BreakpointCss.fromProps(cssResponsiveProps);
+        }));
+    }
+
+    const _shape = (): string => {
+        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(shape, {
+            normal: [{ name: "border-radius", value: theme.specs.components.button.shape.normal.radius }],
+            circle: [{ name: "border-radius", value: theme.specs.components.button.shape.circle.radius }],
+            rounded: [{ name: "border-radius", value: theme.specs.components.button.shape.rounded.radius }]
+        }))
     }
 
     const _css = (): string => {
@@ -112,6 +130,7 @@ export const useButtonStyle = ({
 
         return cssFromCssProps
             .concat(_size())
+            .concat(_shape())
             .concat(cssFromCssString);
     }
 

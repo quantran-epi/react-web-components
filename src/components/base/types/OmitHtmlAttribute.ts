@@ -1,0 +1,1 @@
+export type CommonOmitHtmlAttribute = "children" | "className" | "style";

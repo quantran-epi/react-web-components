@@ -123,6 +123,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
     }
 
     const _getCssFromCssProps = (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType): string => {
+        if (props.length === 0) return "";
         let breakpointGroups = _getCssBreakpointGroups(props);
         return breakpointGroups.map(group => {
             if (group.breakpoint === BreakpointGroupKeyType.None)
