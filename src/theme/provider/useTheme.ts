@@ -21,12 +21,12 @@ interface IUseThemeProps<T extends IThemeSpecs = IThemeSpecs> {
 
 export const useTheme = <T extends IThemeSpecs = IThemeSpecs>(props?: IUseThemeProps<T>): IUseTheme<T> => {
     const { theme: themeSpecs, switchTheme } = useContext<IThemeContextData<T>>(ThemeContext);
-
+    let colorFunctions = ColorFunction(themeSpecs);
     return {
         theme: {
             specs: themeSpecs,
             functions: {
-                color: ColorFunction(themeSpecs)
+                color: colorFunctions
             }
         },
         switchTheme: switchTheme

@@ -1,7 +1,6 @@
 import { ResponsiveValue } from "@theme/responsive/types";
-import { ButtonColor, ButtonShape, ButtonSize, ButtonType } from "@theme/specs/abstract/components";
-import { IBorderProps, IClassNameProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props";
-import { LiteralUnion } from "type-fest";
+import { ButtonShape, ButtonSize, ButtonType } from "@theme/specs/abstract/components";
+import { IBgColorProps, IBorderProps, IClassNameProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props";
 import { CommonOmitHtmlAttribute, IStyledComponentProps } from "../base/types";
 
 export type ButtonHtmlType = "submit" | "button" | "reset";
@@ -10,12 +9,13 @@ export interface IButtonStyleProps extends
     IMarginProps,
     IPaddingProps,
     IBorderProps,
+    IBgColorProps,
     IHoverProps<IMarginProps
     & IPaddingProps
     & IBorderProps
+    & IBgColorProps
     & ISystemOverrideProps> {
     size?: ResponsiveValue<ButtonSize>;
-    color?: ResponsiveValue<LiteralUnion<ButtonColor, string>>;
     shape?: ResponsiveValue<ButtonShape>;
     type?: ResponsiveValue<ButtonType>;
 }

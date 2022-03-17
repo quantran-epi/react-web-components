@@ -1,4 +1,13 @@
-export interface IThemeColor {
+export type ThemeShortHandColor = {
+    primary: string;
+    secondary: string;
+    gray: string;
+    success: string;
+    danger: string;
+    warning: string;
+}
+
+export type ThemeColorPalette = {
     primary100: string;
     primary200: string;
     primary300: string;
@@ -49,16 +58,6 @@ export interface IThemeColor {
     warning800: string;
     warning900: string;
 
-    border100: string;
-    border200: string;
-    border300: string;
-    border400: string;
-    border500: string;
-    border600: string;
-    border700: string;
-    border800: string;
-    border900: string;
-
     white: string;
     gray50: string;
     gray100: string;
@@ -72,3 +71,29 @@ export interface IThemeColor {
     gray900: string;
     black: string;
 }
+
+export interface ThemeComponentColorPalette {
+    border100: string;
+    border200: string;
+    border300: string;
+    border400: string;
+    border500: string;
+    border600: string;
+    border700: string;
+    border800: string;
+    border900: string;
+
+    link: string;
+    linkVisited: string;
+    linkHover: string;
+}
+
+export type ThemeColorContrastMapper
+    = Record<keyof ThemeShortHandColor | keyof ThemeColorPalette, string>;
+
+export type IThemeColor = {
+    shortHand: ThemeShortHandColor,
+    palette: ThemeColorPalette;
+    contrastMapper: ThemeColorContrastMapper;
+    component: ThemeComponentColorPalette;
+} 

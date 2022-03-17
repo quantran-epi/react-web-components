@@ -1,13 +1,16 @@
 export interface IThemeFontSize {
-    tiny: string | number;
-    xs: string | number;
-    sm: string | number;
-    md: string | number;
-    lg: string | number;
-    xl: string | number;
-    "2xl": string | number;
-    "3xl": string | number;
-    "4xl": string | number;
-    "5xl": string | number;
-    "6xl": string | number;
+    values: {
+        tiny: number;
+        xs: number;
+        sm: number;
+        md: number;
+        lg: number;
+        xl: number;
+        "2xl": number;
+        "3xl": number;
+        "4xl": number;
+        "5xl": number;
+        "6xl": number;
+    },
+    unit: "px" | "em" | "rem"
 }

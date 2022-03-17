@@ -19,12 +19,18 @@ export default {
 //     }
 // }
 
-export const Default = () => <Button
-    type={["dashed", "filled", 'outlined', "outlined"]}
-    color={["primary", "secondary", "success"]}
-    margin={50}
-    marginTop={{ xs: 100, md: 50, lg: 200 }}
-    href="test href"
-    onClick={() => { alert('dada') }}
-    title="button title"
-    id="button_id"> Button</Button>
+export const Default = () => <React.Fragment>
+    <Button
+        type={"primary"}
+        size={{ xs: "sm", md: "lg", xl: "sm" }}
+        margin={50}
+        marginTop={{ xs: 100, md: 50, lg: 200 }}
+        href="test href"
+        onClick={() => { alert('dada') }}
+        title="button title"
+        id="button_id"> Button</Button>
+    <Button
+        type={["dashed", 'outlined']}>
+        Button
+    </Button>
+</React.Fragment>

@@ -1,6 +1,8 @@
-import { ShortHandColorType } from '@theme/types';
 import { ResponsiveValue } from "@theme/responsive/types";
+import { ThemeColorPalette, ThemeShortHandColor } from "@theme/specs/abstract/base";
 import { LiteralUnion } from "type-fest";
+
+export type BorderStyle = "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset";
 
 export interface IBorderProps {
     border?: ResponsiveValue;
@@ -9,6 +11,6 @@ export interface IBorderProps {
     borderTopWidth?: ResponsiveValue;
     borderLeftWidth?: ResponsiveValue;
     borderRightWidth?: ResponsiveValue;
-    borderStyle?: ResponsiveValue<"none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset">;
-    borderColor?: ResponsiveValue<LiteralUnion<ShortHandColorType, string>>;
+    borderStyle?: ResponsiveValue<BorderStyle>;
+    borderColor?: ResponsiveValue<LiteralUnion<keyof ThemeShortHandColor | keyof ThemeColorPalette, string>>;
 }

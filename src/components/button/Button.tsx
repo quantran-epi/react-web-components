@@ -13,9 +13,9 @@ export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     children,
     className,
     size,
-    color,
     shape,
     type,
+    bgColor,
 
     htmlType,
     onClick,
@@ -28,9 +28,9 @@ export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
     const nativeProps = omitProps(props, styleProps);
     const { css: _buttonCss } = useButtonStyle({
         size,
-        color,
         shape,
         type,
+        bgColor,
         ...styleProps
     });
 

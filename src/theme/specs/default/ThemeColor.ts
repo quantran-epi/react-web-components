@@ -1,6 +1,6 @@
-import { IThemeColor } from '@theme/specs/abstract/base';
+import { IThemeColor, ThemeColorPalette, ThemeColorContrastMapper, ThemeComponentColorPalette } from '@theme/specs/abstract/base';
 
-export const ThemeColor: IThemeColor = {
+const colorPalette: ThemeColorPalette = {
     primary100: "#bbdefb",
     primary200: "#90caf9",
     primary300: "#64b5f6",
@@ -51,16 +51,6 @@ export const ThemeColor: IThemeColor = {
     warning800: "#ff8f00",
     warning900: "#ff6f00",
 
-    border100: "#f5f5f5",
-    border200: "#eeeeee",
-    border300: "#e0e0e0",
-    border400: "#bdbdbd",
-    border500: "#9e9e9e",
-    border600: "#757575",
-    border700: "#616161",
-    border800: "#424242",
-    border900: "#212121",
-
     white: "#ffffff",
     gray50: "#fafafa",
     gray100: "#f5f5f5",
@@ -72,5 +62,101 @@ export const ThemeColor: IThemeColor = {
     gray700: "#616161",
     gray800: "#424242",
     gray900: "#212121",
-    black: "#000000"
+    black: "#000000",
+}
+
+const componentPalette: ThemeComponentColorPalette = {
+    border100: colorPalette.gray100,
+    border200: colorPalette.gray200,
+    border300: colorPalette.gray300,
+    border400: colorPalette.gray400,
+    border500: colorPalette.gray500,
+    border600: colorPalette.gray600,
+    border700: colorPalette.gray700,
+    border800: colorPalette.gray800,
+    border900: colorPalette.gray900,
+
+    link: colorPalette.primary300,
+    linkHover: colorPalette.primary100,
+    linkVisited: colorPalette.primary900
+}
+
+const themeColorContrastMapper: ThemeColorContrastMapper = {
+    primary: colorPalette.white,
+    primary100: colorPalette.white,
+    primary200: colorPalette.white,
+    primary300: colorPalette.white,
+    primary400: colorPalette.white,
+    primary500: colorPalette.white,
+    primary600: colorPalette.white,
+    primary700: colorPalette.white,
+    primary800: colorPalette.white,
+    primary900: colorPalette.white,
+    secondary: colorPalette.white,
+    secondary100: colorPalette.white,
+    secondary200: colorPalette.white,
+    secondary300: colorPalette.white,
+    secondary400: colorPalette.white,
+    secondary500: colorPalette.white,
+    secondary600: colorPalette.white,
+    secondary700: colorPalette.white,
+    secondary800: colorPalette.white,
+    secondary900: colorPalette.white,
+    success: colorPalette.white,
+    success100: colorPalette.white,
+    success200: colorPalette.white,
+    success300: colorPalette.white,
+    success400: colorPalette.white,
+    success500: colorPalette.white,
+    success600: colorPalette.white,
+    success700: colorPalette.white,
+    success800: colorPalette.white,
+    success900: colorPalette.white,
+    danger: colorPalette.white,
+    danger100: colorPalette.white,
+    danger200: colorPalette.white,
+    danger300: colorPalette.white,
+    danger400: colorPalette.white,
+    danger500: colorPalette.white,
+    danger600: colorPalette.white,
+    danger700: colorPalette.white,
+    danger800: colorPalette.white,
+    danger900: colorPalette.white,
+    warning: colorPalette.white,
+    warning100: colorPalette.white,
+    warning200: colorPalette.white,
+    warning300: colorPalette.white,
+    warning400: colorPalette.white,
+    warning500: colorPalette.white,
+    warning600: colorPalette.white,
+    warning700: colorPalette.white,
+    warning800: colorPalette.white,
+    warning900: colorPalette.white,
+    white: colorPalette.black,
+    gray: colorPalette.black,
+    gray50: colorPalette.black,
+    gray100: colorPalette.black,
+    gray200: colorPalette.black,
+    gray300: colorPalette.black,
+    gray400: colorPalette.black,
+    gray500: colorPalette.black,
+    gray600: colorPalette.black,
+    gray700: colorPalette.black,
+    gray800: colorPalette.black,
+    gray900: colorPalette.black,
+    black: colorPalette.white
+}
+
+export const ThemeColor: IThemeColor = {
+    shortHand: {
+        primary: colorPalette.primary500,
+        secondary: colorPalette.secondary500,
+        danger: colorPalette.danger500,
+        gray: colorPalette.gray500,
+        success: colorPalette.success500,
+        warning: colorPalette.gray200
+    },
+    palette: colorPalette,
+    contrastMapper: themeColorContrastMapper,
+    component: componentPalette
 }

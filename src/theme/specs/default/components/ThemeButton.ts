@@ -5,25 +5,89 @@ import { ThemeShadow } from "../ThemeShadow";
 import { ThemeSpacing } from "../ThemeSpacing";
 
 export const ThemeButton: IThemeButton = {
-    color: {
-        primary: ThemeColor.primary500,
-        secondary: ThemeColor.secondary500,
-        success: ThemeColor.success500,
-        danger: ThemeColor.danger500,
-        warning: ThemeColor.warning500,
-        default: ThemeColor.gray300
+    type: {
+        primary: {
+            bgColor: ThemeColor.shortHand.primary,
+            fgColor: ThemeColor.contrastMapper["primary"],
+            borderColor: "",
+            borderStyle: "none",
+            borderWidth: 0,
+            _hover: {
+                bgColor: ThemeColor.palette.primary300,
+                fgColor: ThemeColor.contrastMapper["primary"],
+                borderColor: "",
+                borderStyle: "none",
+                borderWidth: 0,
+            }
+        },
+        text: {
+            bgColor: "transparent",
+            fgColor: ThemeColor.palette.black,
+            borderColor: "",
+            borderStyle: "none",
+            borderWidth: 0,
+            _hover: {
+                bgColor: ThemeColor.palette.gray200,
+                fgColor: ThemeColor.palette.black,
+                borderColor: "",
+                borderStyle: "none",
+                borderWidth: 0,
+            }
+        },
+        outlined: {
+            bgColor: "transparent",
+            fgColor: ThemeColor.palette.black,
+            borderColor: ThemeColor.palette.black,
+            borderStyle: "solid",
+            borderWidth: 1,
+            _hover: {
+                bgColor: ThemeColor.palette.gray200,
+                fgColor: ThemeColor.palette.black,
+                borderColor: ThemeColor.palette.black,
+                borderStyle: "solid",
+                borderWidth: 1,
+            }
+        },
+        dashed: {
+            bgColor: "transparent",
+            fgColor: ThemeColor.palette.black,
+            borderColor: ThemeColor.palette.black,
+            borderStyle: "dashed",
+            borderWidth: 1,
+            _hover: {
+                bgColor: "transparent",
+                fgColor: ThemeColor.palette.gray200,
+                borderColor: ThemeColor.palette.black,
+                borderStyle: "dashed",
+                borderWidth: 1,
+            }
+        },
+        link: {
+            bgColor: "transparent",
+            fgColor: ThemeColor.component.link,
+            borderColor: "",
+            borderStyle: "none",
+            borderWidth: 0,
+            _hover: {
+                bgColor: "transparent",
+                fgColor: ThemeColor.component.linkHover,
+                borderColor: "",
+                borderStyle: "none",
+                borderWidth: 0,
+            }
+        }
     },
     size: {
         sm: {
-            fontSize: ThemeFontSize.sm,
+            fontSize: ThemeFontSize.values.sm,
             padding: ThemeSpacing.generator([1.25, 2.25])
         },
         md: {
-            fontSize: ThemeFontSize.md,
+            fontSize: ThemeFontSize.values.md,
             padding: ThemeSpacing.generator([1.5, 2.5])
         },
         lg: {
-            fontSize: ThemeFontSize.lg,
+            fontSize: ThemeFontSize.values.lg,
             padding: ThemeSpacing.generator([1.75, 2.75])
         }
     },
@@ -32,5 +96,10 @@ export const ThemeButton: IThemeButton = {
         rounded: { radius: "33%" },
         circle: { radius: "50%" }
     },
-    shadow: ThemeShadow[3]
+    shadow: {
+        value: ThemeShadow[3],
+        _hover: {
+            value: ThemeShadow[5]
+        }
+    }
 }

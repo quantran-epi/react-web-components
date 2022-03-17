@@ -17,7 +17,8 @@ interface IUseResponsiveValue {
         getResponsivePropsWithDependencies: <I extends string | number | symbol, D1 extends string | number | symbol, D2 extends string | number | symbol>(
             value: ResponsiveValue<I>,
             mapper: (value: I, d1: D1, d2?: D2) => Record<I, ICssProps[]>,
-            dependencies: [ResponsiveValue<D1>, ResponsiveValue<D2>?]) => ICssResponsiveProp[];
+            dependencies: [ResponsiveValue<D1>, ResponsiveValue<D2>?],
+            defaultValue?: I) => ICssResponsiveProp[];
     }
 }
 
@@ -94,7 +95,7 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
         return value;
     }
 
-    const _standardizeValue = <T>(value: ResponsiveValue<T>): ResponsiveValue<T> => {
+    const _standardizeValue = <T>(value: ResponsiveValue<T>, defaultValue?: T): ResponsiveValue<T> => {
         if (value instanceof Array) {
             if (value.length === sortKeys.length) return value;
             let standardValue: T[] = [];
@@ -105,14 +106,15 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
             return standardValue;
         }
         else if (typeof value === "object") {
-            // if (Object.keys(value).length === sortKeys.length) return value;
-            // let standardValue = {};
-            // sortKeys.forEach(breakpoint => {
-            //     if (value[breakpoint] !== undefined) standardValue[breakpoint] = value[breakpoint];
-            //     else standardValue[breakpoint] = 
-            // })
+            if (Object.keys(value).length === sortKeys.length) return value;
+            let standardValue = {};
+            sortKeys.forEach(breakpoint => {
+                if (value[breakpoint] !== undefined) standardValue[breakpoint] = value[breakpoint];
+                else standardValue[breakpoint] = defaultValue;
+            })
+            return standardValue;
         }
-        return value;
+        return new Array(sortKeys.length).fill(value);
     }
 
     const _getResponsivePropsFromUnion = <I extends string | number | symbol>(value: ResponsiveValue<I>, mapper: Record<I, ICssProps[]>): ICssResponsiveProp[] => {
@@ -167,19 +169,20 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
     const _getResponsivePropsFromUnionWithDependencies = <I extends string | number | symbol, D1 extends string | number | symbol, D2 extends string | number | symbol>(
         value: ResponsiveValue<I>,
         mapper: (value?: I, d1?: D1, d2?: D2) => Record<I, ICssProps[]>,
-        dependencies: [ResponsiveValue<D1>, ResponsiveValue<D2>?])
+        dependencies: [ResponsiveValue<D1>, ResponsiveValue<D2>?],
+        defaultValue?: I)
         : ICssResponsiveProp[] => {
         debugger
-        value = _standardizeValue(value);
+        value = _standardizeValue(value, defaultValue);
         if (value instanceof Array) {
             let responsiveProps: ICssResponsiveProp[] = [];
             for (let i = 0; i < value.length; i++) {
-                let a = mapper(value[i],
+                let mapperObject = mapper(value[i],
                     _getValueAt<D1>(dependencies[0], sortKeys[i]),
                     _getValueAt<D2>(dependencies[1], sortKeys[i]));
-                let b = a[value[i]];
+                let cssProps = mapperObject[value[i]];
                 debugger
-                b.forEach(cssProp => { // push new responsive prop value at this breakpoint
+                cssProps.forEach(cssProp => { // push new responsive prop value at this breakpoint
                     debugger
                     let existedProp = responsiveProps.find(p => p.name === cssProp.name);
                     if (existedProp) {
@@ -196,7 +199,7 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
                     }
                 });
                 responsiveProps = responsiveProps.map(prop => {
-                    if (b.some(cssProp => cssProp.name === prop.name)) // exist in b
+                    if (cssProps.some(cssProp => cssProp.name === prop.name)) // exist in b
                         return prop;
                     let cloneProp = Object.assign({}, prop);
                     cloneProp.value[i] = null;
@@ -208,30 +211,30 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
         else if (typeof value === "object") {
             let responsiveProps: ICssResponsiveProp[] = [];
             Object.keys(value).forEach((breakpoint: BreakpointType) => {
-                mapper[value[breakpoint]].forEach(cssProp => { // update existing responsive prop
-                    let existedProp = responsiveProps.find(p => p.name === cssProp.name);
-                    if (existedProp) {
-                        existedProp.value[breakpoint] = cssProp.value;
-                    }
-                    else { // push new responsive prop value at this breakpoint
-                        responsiveProps.push({
-                            name: cssProp.name,
-                            unit: cssProp.unit,
-                            value: {
-                                [breakpoint]: cssProp.value
-                            }
-                        })
-                    }
-                })
+                let mapperObject = mapper(value[breakpoint],
+                    _getValueAt<D1>(dependencies[0], breakpoint),
+                    _getValueAt<D2>(dependencies[1], breakpoint)); // dependency need a default value
+                let cssProps = mapperObject[value[breakpoint]];
+                if (cssProps !== undefined) {
+                    cssProps.forEach(cssProp => { // update existing responsive prop
+                        let existedProp = responsiveProps.find(p => p.name === cssProp.name);
+                        if (existedProp) {
+                            existedProp.value[breakpoint] = cssProp.value;
+                        }
+                        else { // push new responsive prop value at this breakpoint
+                            responsiveProps.push({
+                                name: cssProp.name,
+                                unit: cssProp.unit,
+                                value: {
+                                    [breakpoint]: cssProp.value
+                                }
+                            })
+                        }
+                    })
+                }
             })
             return responsiveProps;
         }
-
-        return mapper[value as I].map(prop => ({
-            name: prop.name,
-            value: prop.value,
-            unit: prop.unit
-        }))
     }
 
     return {

@@ -1,5 +1,6 @@
 import { useTheme } from "@theme/provider";
 import { useBreakpointCss, useComponentBaseCss, useResponsiveValue } from "@theme/responsive/hooks";
+import { merge } from "lodash";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonStyleProps } from "./Button.types";
 
@@ -39,10 +40,10 @@ export const useButtonStyle = ({
 
     _hover,
 
-    color = "primary",
+    bgColor,
     shape = "normal",
     size = "md",
-    type = "filled",
+    type = "primary",
 
     sx
 }: IUseButtonStyleProps): IUseButtonStyle => {
@@ -60,45 +61,34 @@ export const useButtonStyle = ({
 
     const _type = (): string => {
         debugger
-        let props = ResponsiveValue.Union.getResponsivePropsWithDependencies(type, (value, color) => {
-            let _color = "";
-            switch (color) {
-                case "primary": _color = theme.specs.components.button.color.primary; break;
-                case "secondary": _color = theme.specs.components.button.color.secondary; break;
-                case "default": _color = theme.specs.components.button.color.default; break;
-                case "success": _color = theme.specs.components.button.color.success; break;
-                case "warning": _color = theme.specs.components.button.color.warning; break;
-                case "danger": _color = theme.specs.components.button.color.danger; break;
-                default: theme.functions.color.resolve(color);
-            }
-
+        let props = ResponsiveValue.Union.getResponsivePropsWithDependencies(type, (value, size = "lg") => {
             return {
                 text: [
-                    { name: "color", value: _color },
+                    { name: "color", value: size },
                     { name: "background-color", value: "transparent" }
                 ],
                 dashed: [
-                    { name: "color", value: _color },
-                    { name: "border-color", value: _color },
+                    { name: "color", value: "" },
+                    { name: "border-color", value: size },
                     { name: "border-style", value: "dashed" },
                     { name: "border-width", value: 1 }
                 ],
-                filled: [
-                    { name: "color", value: color === "default" ? theme.specs.color.black : theme.specs.color.white },
-                    { name: "background-color", value: _color }
+                primary: [
+                    { name: "color", value: size },
+                    { name: "background-color", value: size }
                 ],
                 link: [
-                    { name: "color", value: _color },
+                    { name: "color", value: size },
                     { name: "background-color", value: "transparent" }
                 ],
                 outlined: [
-                    { name: "color", value: _color },
-                    { name: "border-color", value: _color },
+                    { name: "color", value: size },
+                    { name: "border-color", value: size },
                     { name: "border-style", value: "solid" },
                     { name: "border-width", value: 1 }
                 ]
             }
-        }, [color])
+        }, [size], "primary")
         return BreakpointCss.fromProps(props);
     }
 
