@@ -51,8 +51,55 @@ export const useButtonStyle = ({
     const BreakpointCss = useBreakpointCss();
     const { theme } = useTheme();
 
+    const _defaultStyle = (): string => {
+        return `
+            border: none;
+            background-color: transparent;
+        `
+    }
+
     const _type = (): string => {
-        return "";
+        debugger
+        let props = ResponsiveValue.Union.getResponsivePropsWithDependencies(type, (value, color) => {
+            let _color = "";
+            switch (color) {
+                case "primary": _color = theme.specs.components.button.color.primary; break;
+                case "secondary": _color = theme.specs.components.button.color.secondary; break;
+                case "default": _color = theme.specs.components.button.color.default; break;
+                case "success": _color = theme.specs.components.button.color.success; break;
+                case "warning": _color = theme.specs.components.button.color.warning; break;
+                case "danger": _color = theme.specs.components.button.color.danger; break;
+                default: theme.functions.color.resolve(color);
+            }
+
+            return {
+                text: [
+                    { name: "color", value: _color },
+                    { name: "background-color", value: "transparent" }
+                ],
+                dashed: [
+                    { name: "color", value: _color },
+                    { name: "border-color", value: _color },
+                    { name: "border-style", value: "dashed" },
+                    { name: "border-width", value: 1 }
+                ],
+                filled: [
+                    { name: "color", value: color === "default" ? theme.specs.color.black : theme.specs.color.white },
+                    { name: "background-color", value: _color }
+                ],
+                link: [
+                    { name: "color", value: _color },
+                    { name: "background-color", value: "transparent" }
+                ],
+                outlined: [
+                    { name: "color", value: _color },
+                    { name: "border-color", value: _color },
+                    { name: "border-style", value: "solid" },
+                    { name: "border-width", value: 1 }
+                ]
+            }
+        }, [color])
+        return BreakpointCss.fromProps(props);
     }
 
     const _size = (): string => {
@@ -129,6 +176,8 @@ export const useButtonStyle = ({
         })
 
         return cssFromCssProps
+            .concat(_defaultStyle())
+            .concat(_type())
             .concat(_size())
             .concat(_shape())
             .concat(cssFromCssString);

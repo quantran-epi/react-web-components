@@ -1,4 +1,4 @@
-import { IActiveProps, IAfterProps, IBeforeProps, IBgColorProps, IBorderProps, IClassNameProps, IColorProps, IFocusProps, IHoverProps, IMarginProps, IPaddingProps, ISquareSizeProps, ISystemOverrideProps } from "@theme/style-props"
+import { IActiveProps, IAfterProps, IBeforeProps, IBgColorProps, IBorderProps, IClassNameProps, IFocusProps, IHoverProps, IMarginProps, IPaddingProps, ISquareSizeProps, ISystemOverrideProps } from "@theme/style-props"
 
 interface IUsePropResolution {
     getStyleProps: (props: any) => any;
@@ -33,9 +33,6 @@ const BORDER: Array<keyof IBorderProps> = [
     "borderTopWidth",
     "borderWidth"
 ]
-const COLOR: Array<keyof IColorProps> = [
-    "color"
-]
 const BG_COLOR: Array<keyof IBgColorProps> = [
     "bgColor"
 ]
@@ -65,7 +62,7 @@ const _FOCUS: Array<keyof IFocusProps<any>> = [
     "_focus"
 ]
 
-const STYLE_PROPS = [...PADDING, ...MARGIN, ...BORDER, ...COLOR, ...BG_COLOR, ...CLASS_NAME, ...SQUARE_SIZE, ...SYSTEM_OVERRIDE];
+const STYLE_PROPS = [...PADDING, ...MARGIN, ...BORDER, ...BG_COLOR, ...CLASS_NAME, ...SQUARE_SIZE, ...SYSTEM_OVERRIDE];
 
 export const usePropResolution = (): IUsePropResolution => {
 

@@ -24,12 +24,12 @@ export type AnchorButtonProps = {
     href: string;
     target?: string, // convert to anchor's target type later
     onClick?: React.MouseEventHandler<HTMLAnchorElement>;
-} & IButtonStyleProps & Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick' | CommonOmitHtmlAttribute>;
+} & IButtonStyleProps & Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick' | "color" | CommonOmitHtmlAttribute>;
 
 export type NativeButtonProps = {
     htmlType?: ButtonHtmlType;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
-} & IButtonStyleProps & Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick' | CommonOmitHtmlAttribute>;
+} & IButtonStyleProps & Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick' | "color" | CommonOmitHtmlAttribute>;
 
 export interface IButtonProps extends
     Partial<NativeButtonProps & AnchorButtonProps>,
