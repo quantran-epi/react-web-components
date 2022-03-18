@@ -5,6 +5,11 @@ import { ThemeShadow } from "../ThemeShadow";
 import { ThemeSpacing } from "../ThemeSpacing";
 
 export const ThemeButton: IThemeButton = {
+    defaultProps: {
+        shape: "normal",
+        size: "md",
+        type: "primary"
+    },
     type: {
         primary: {
             bgColor: ThemeColor.shortHand.primary,

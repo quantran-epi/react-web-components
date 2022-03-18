@@ -1,8 +1,9 @@
 import { useTheme } from "@theme/provider";
 import { useBreakpointCss, useComponentBaseCss, useResponsiveValue } from "@theme/responsive/hooks";
+import { IButtonStyleProps } from "@theme/specs/abstract/components";
+import DefaultThemeSpecs from "@theme/specs/default";
 import { merge } from "lodash";
 import { IComponentStyleHook } from "../base/types";
-import { IButtonStyleProps } from "./Button.types";
 
 interface IUseButtonStyleProps extends Partial<IButtonStyleProps> {
 
@@ -12,41 +13,37 @@ interface IUseButtonStyle extends IComponentStyleHook {
 
 }
 
-export const useButtonStyle = ({
-    margin,
-    marginBottom,
-    marginHorizontal,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginVertical,
-
-    padding,
-    paddingBottom,
-    paddingHorizontal,
-    paddingLeft,
-    paddingRight,
-    paddingTop,
-    paddingVertical,
-
-    border,
-    borderBottomWidth,
-    borderColor,
-    borderLeftWidth,
-    borderRightWidth,
-    borderStyle,
-    borderTopWidth,
-    borderWidth,
-
-    _hover,
-
-    bgColor,
-    shape = "normal",
-    size = "md",
-    type = "primary",
-
-    sx
-}: IUseButtonStyleProps): IUseButtonStyle => {
+export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => {
+    let {
+        margin,
+        marginBottom,
+        marginHorizontal,
+        marginLeft,
+        marginRight,
+        marginTop,
+        marginVertical,
+        padding,
+        paddingBottom,
+        paddingHorizontal,
+        paddingLeft,
+        paddingRight,
+        paddingTop,
+        paddingVertical,
+        border,
+        borderBottomWidth,
+        borderColor,
+        borderLeftWidth,
+        borderRightWidth,
+        borderStyle,
+        borderTopWidth,
+        borderWidth,
+        _hover,
+        bgColor,
+        size,
+        shape,
+        type,
+        sx
+    } = merge(DefaultThemeSpecs.components.button.defaultProps, props);
     const ComponentBaseCss = useComponentBaseCss();
     const ResponsiveValue = useResponsiveValue();
     const BreakpointCss = useBreakpointCss();
@@ -60,36 +57,43 @@ export const useButtonStyle = ({
     }
 
     const _type = (): string => {
-        debugger
-        let props = ResponsiveValue.Union.getResponsivePropsWithDependencies(type, (value, size = "lg") => {
-            return {
-                text: [
-                    { name: "color", value: size },
-                    { name: "background-color", value: "transparent" }
-                ],
-                dashed: [
-                    { name: "color", value: "" },
-                    { name: "border-color", value: size },
-                    { name: "border-style", value: "dashed" },
-                    { name: "border-width", value: 1 }
-                ],
-                primary: [
-                    { name: "color", value: size },
-                    { name: "background-color", value: size }
-                ],
-                link: [
-                    { name: "color", value: size },
-                    { name: "background-color", value: "transparent" }
-                ],
-                outlined: [
-                    { name: "color", value: size },
-                    { name: "border-color", value: size },
-                    { name: "border-style", value: "solid" },
-                    { name: "border-width", value: 1 }
-                ]
-            }
-        }, [size], "primary")
-        return BreakpointCss.fromProps(props);
+        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(type, {
+            primary: [
+                { name: 'color', value: theme.specs.components.button.type.primary.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.primary.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.primary.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.primary.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.primary.borderWidth },
+            ],
+            dashed: [
+                { name: 'color', value: theme.specs.components.button.type.dashed.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.dashed.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.dashed.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.dashed.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.dashed.borderWidth },
+            ],
+            link: [
+                { name: 'color', value: theme.specs.components.button.type.link.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.link.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.link.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.link.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.link.borderWidth },
+            ],
+            text: [
+                { name: 'color', value: theme.specs.components.button.type.text.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.text.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.text.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.text.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.text.borderWidth },
+            ],
+            outlined: [
+                { name: 'color', value: theme.specs.components.button.type.outlined.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.outlined.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.outlined.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.outlined.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.outlined.borderWidth },
+            ],
+        }, "primary"))
     }
 
     const _size = (): string => {
@@ -106,7 +110,7 @@ export const useButtonStyle = ({
                 { name: "padding", value: theme.specs.components.button.size.lg.padding },
                 { name: "font-size", value: theme.specs.components.button.size.lg.fontSize }
             ]
-        }));
+        }, "md"));
     }
 
     const _shape = (): string => {
@@ -114,7 +118,7 @@ export const useButtonStyle = ({
             normal: [{ name: "border-radius", value: theme.specs.components.button.shape.normal.radius }],
             circle: [{ name: "border-radius", value: theme.specs.components.button.shape.circle.radius }],
             rounded: [{ name: "border-radius", value: theme.specs.components.button.shape.rounded.radius }]
-        }))
+        }, "normal"))
     }
 
     const _css = (): string => {

@@ -21,16 +21,15 @@ export default {
 
 export const Default = () => <React.Fragment>
     <Button
-        type={"primary"}
-        size={{ xs: "sm", md: "lg", xl: "sm" }}
-        margin={50}
+        type={{ xs: "primary", sm: "text", lg: "outlined" }}
+        margin={50} 
         marginTop={{ xs: 100, md: 50, lg: 200 }}
         href="test href"
         onClick={() => { alert('dada') }}
         title="button title"
         id="button_id"> Button</Button>
     <Button
-        type={["dashed", 'outlined']}>
+        type={["dashed", 'outlined', "link"]}>
         Button
     </Button>
 </React.Fragment>

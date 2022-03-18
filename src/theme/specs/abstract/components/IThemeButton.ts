@@ -1,5 +1,5 @@
-import { BorderStyle, IHoverProps } from "@theme/style-props";
-import { MergeExclusive } from 'type-fest';
+import { ResponsiveValue } from "@theme/responsive/types";
+import { BorderStyle, IBgColorProps, IBorderProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props";
 
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonShape = "normal" | "rounded" | "circle";
@@ -26,7 +26,24 @@ interface ButtonShadowStyle {
     value: string;
 }
 
+export interface IButtonStyleProps extends
+    ISystemOverrideProps,
+    IMarginProps,
+    IPaddingProps,
+    IBorderProps,
+    IBgColorProps,
+    IHoverProps<IMarginProps
+    & IPaddingProps
+    & IBorderProps
+    & IBgColorProps
+    & ISystemOverrideProps> {
+    size?: ResponsiveValue<ButtonSize>;
+    shape?: ResponsiveValue<ButtonShape>;
+    type?: ResponsiveValue<ButtonType>;
+}
+
 export interface IThemeButton {
+    defaultProps: IButtonStyleProps;
     size: Record<ButtonSize, ButtonSizeStyle>;
     shape: Record<ButtonShape, ButtonShapeStyle>;
     type: Record<ButtonType, ButtonTypeStyle & IHoverProps<ButtonTypeStyle>>;
