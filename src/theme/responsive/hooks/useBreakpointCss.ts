@@ -142,7 +142,10 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
 
     const _getCssFromCssString = (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType): string => {
         let breakpointValues = ResponsiveValue.getBreakpointValues(cssString);
-        if (typeof cssString === "string") return breakpointValues as string;
+        if (typeof cssString === "string") return pseudo === undefined ? breakpointValues as string :
+            `${pseudo} {
+                ${breakpointValues};
+            }`;
         return Object.keys(breakpointValues).map(breakpoint => `
             ${breakpoint} {
                 ${pseudo === undefined ? breakpointValues[breakpoint] :

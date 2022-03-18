@@ -1,5 +1,5 @@
 import { IButtonStyleProps } from "@theme/specs/abstract/components";
-import { IClassNameProps } from "@theme/style-props";
+import { IClassNameProps } from "@theme/style-props/props";
 import { CommonOmitHtmlAttribute, IStyledComponentProps } from "../base/types";
 
 export type ButtonHtmlType = "submit" | "button" | "reset";

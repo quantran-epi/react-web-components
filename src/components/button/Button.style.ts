@@ -1,7 +1,6 @@
 import { useTheme } from "@theme/provider";
-import { useBreakpointCss, useComponentBaseCss, useResponsiveValue } from "@theme/responsive/hooks";
+import { useBreakpointCss, useResponsiveValue, useStylePropsCss } from "@theme/responsive/hooks";
 import { IButtonStyleProps } from "@theme/specs/abstract/components";
-import DefaultThemeSpecs from "@theme/specs/default";
 import { merge } from "lodash";
 import { IComponentStyleHook } from "../base/types";
 
@@ -14,50 +13,34 @@ interface IUseButtonStyle extends IComponentStyleHook {
 }
 
 export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => {
+    const StylePropsCss = useStylePropsCss();
+    const ResponsiveValue = useResponsiveValue();
+    const BreakpointCss = useBreakpointCss();
+    const { theme } = useTheme();
     let {
-        margin,
-        marginBottom,
-        marginHorizontal,
-        marginLeft,
-        marginRight,
-        marginTop,
-        marginVertical,
-        padding,
-        paddingBottom,
-        paddingHorizontal,
-        paddingLeft,
-        paddingRight,
-        paddingTop,
-        paddingVertical,
-        border,
-        borderBottomWidth,
-        borderColor,
-        borderLeftWidth,
-        borderRightWidth,
-        borderStyle,
-        borderTopWidth,
-        borderWidth,
         _hover,
         bgColor,
         size,
         shape,
         type,
-        sx
-    } = merge(DefaultThemeSpecs.components.button.defaultProps, props);
-    const ComponentBaseCss = useComponentBaseCss();
-    const ResponsiveValue = useResponsiveValue();
-    const BreakpointCss = useBreakpointCss();
-    const { theme } = useTheme();
+        sx,
+        disabledElevation,
+        ...restProps
+    } = merge({}, theme.specs.components.button.defaultProps, props);
 
     const _defaultStyle = (): string => {
         return `
             border: none;
             background-color: transparent;
+            box-shadow: ${(type !== "primary" || disabledElevation) ? "none" : theme.specs.components.button.shadow.value};
+            :hover {
+                box-shadow: ${(type !== "primary" || disabledElevation) ? "none" : theme.specs.components.button.shadow._hover.value};
+            }
         `
     }
 
     const _type = (): string => {
-        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(type, {
+        let _normalProps = ResponsiveValue.Union.getResponsiveProps(type, {
             primary: [
                 { name: 'color', value: theme.specs.components.button.type.primary.fgColor },
                 { name: 'background-color', value: theme.specs.components.button.type.primary.bgColor },
@@ -93,7 +76,47 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
                 { name: 'border-style', value: theme.specs.components.button.type.outlined.borderStyle },
                 { name: 'border-width', value: theme.specs.components.button.type.outlined.borderWidth },
             ],
-        }, "primary"))
+        }, "primary");
+        let _hoverProps = ResponsiveValue.Union.getResponsiveProps(type, {
+            primary: [
+                { name: 'color', value: theme.specs.components.button.type.primary._hover.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.primary._hover.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.primary._hover.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.primary._hover.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.primary._hover.borderWidth },
+            ],
+            dashed: [
+                { name: 'color', value: theme.specs.components.button.type.dashed._hover.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.dashed._hover.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.dashed._hover.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.dashed._hover.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.dashed._hover.borderWidth },
+            ],
+            link: [
+                { name: 'color', value: theme.specs.components.button.type.link._hover.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.link._hover.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.link._hover.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.link._hover.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.link._hover.borderWidth },
+            ],
+            text: [
+                { name: 'color', value: theme.specs.components.button.type.text._hover.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.text._hover.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.text._hover.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.text._hover.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.text._hover.borderWidth },
+            ],
+            outlined: [
+                { name: 'color', value: theme.specs.components.button.type.outlined._hover.fgColor },
+                { name: 'background-color', value: theme.specs.components.button.type.outlined._hover.bgColor },
+                { name: 'border-color', value: theme.specs.components.button.type.outlined._hover.borderColor },
+                { name: 'border-style', value: theme.specs.components.button.type.outlined._hover.borderStyle },
+                { name: 'border-width', value: theme.specs.components.button.type.outlined._hover.borderWidth },
+            ],
+        }, "primary");
+
+        return BreakpointCss.fromProps(_normalProps)
+            .concat(BreakpointCss.fromProps(_hoverProps, ":hover"));
     }
 
     const _size = (): string => {
@@ -122,59 +145,55 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
     }
 
     const _css = (): string => {
-        let cssFromCssString = ComponentBaseCss.fromString({
-            _hover: (_hover === undefined || _hover.sx === undefined) ? undefined : {
-                css: _hover.sx.css
-            },
-            css: sx?.css
-        });
-        let cssFromCssProps = ComponentBaseCss.fromProps.group({
-            _hover: _hover === undefined ? undefined : {
+        debugger
+        let stylePropsCss = StylePropsCss.group({
+            _hover: {
                 margin: {
-                    margin: _hover.margin,
-                    marginBottom: _hover.marginBottom,
-                    marginLeft: _hover.marginLeft,
-                    marginRight: _hover.marginRight,
-                    marginTop: _hover.marginTop,
-                    marginVertical: _hover.marginVertical,
-                    marginHorizontal: _hover.marginHorizontal
+                    margin: _hover?.margin,
+                    marginBottom: _hover?.marginBottom,
+                    marginLeft: _hover?.marginLeft,
+                    marginRight: _hover?.marginRight,
+                    marginTop: _hover?.marginTop,
+                    marginVertical: _hover?.marginVertical,
+                    marginHorizontal: _hover?.marginHorizontal
                 },
                 padding: {
-                    padding: _hover.padding,
-                    paddingBottom: _hover.paddingBottom,
-                    paddingLeft: _hover.paddingLeft,
-                    paddingRight: _hover.paddingRight,
-                    paddingTop: _hover.paddingTop,
-                    paddingVertical: _hover.paddingVertical,
-                    paddingHorizontal: _hover.paddingHorizontal
+                    padding: _hover?.padding,
+                    paddingBottom: _hover?.paddingBottom,
+                    paddingLeft: _hover?.paddingLeft,
+                    paddingRight: _hover?.paddingRight,
+                    paddingTop: _hover?.paddingTop,
+                    paddingVertical: _hover?.paddingVertical,
+                    paddingHorizontal: _hover?.paddingHorizontal
                 },
+                css: _hover?.sx?.css
             },
             margin: {
-                margin,
-                marginBottom,
-                marginLeft,
-                marginRight,
-                marginTop,
-                marginVertical,
-                marginHorizontal
+                margin: restProps.margin,
+                marginBottom: restProps.marginBottom,
+                marginLeft: restProps.marginLeft,
+                marginRight: restProps.marginRight,
+                marginTop: restProps.marginTop,
+                marginVertical: restProps.marginVertical,
+                marginHorizontal: restProps.marginHorizontal
             },
             padding: {
-                padding,
-                paddingBottom,
-                paddingHorizontal,
-                paddingLeft,
-                paddingRight,
-                paddingTop,
-                paddingVertical
-            }
+                padding: restProps.padding,
+                paddingBottom: restProps.paddingBottom,
+                paddingLeft: restProps.paddingLeft,
+                paddingRight: restProps.paddingRight,
+                paddingTop: restProps.paddingTop,
+                paddingVertical: restProps.paddingVertical,
+                paddingHorizontal: restProps.paddingHorizontal
+            },
+            css: sx?.css
         })
 
-        return cssFromCssProps
-            .concat(_defaultStyle())
+        return _defaultStyle()
             .concat(_type())
             .concat(_size())
             .concat(_shape())
-            .concat(cssFromCssString);
+            .concat(stylePropsCss);
     }
 
     return {

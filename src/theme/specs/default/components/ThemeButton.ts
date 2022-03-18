@@ -6,9 +6,10 @@ import { ThemeSpacing } from "../ThemeSpacing";
 
 export const ThemeButton: IThemeButton = {
     defaultProps: {
-        shape: "normal",
         size: "md",
-        type: "primary"
+        shape: "normal",
+        type: "primary",
+        disabledElevation: false
     },
     type: {
         primary: {
@@ -27,13 +28,13 @@ export const ThemeButton: IThemeButton = {
         },
         text: {
             bgColor: "transparent",
-            fgColor: ThemeColor.palette.black,
+            fgColor: ThemeColor.palette.gray900,
             borderColor: "",
             borderStyle: "none",
             borderWidth: 0,
             _hover: {
                 bgColor: ThemeColor.palette.gray200,
-                fgColor: ThemeColor.palette.black,
+                fgColor: ThemeColor.palette.gray900,
                 borderColor: "",
                 borderStyle: "none",
                 borderWidth: 0,
@@ -41,28 +42,28 @@ export const ThemeButton: IThemeButton = {
         },
         outlined: {
             bgColor: "transparent",
-            fgColor: ThemeColor.palette.black,
-            borderColor: ThemeColor.palette.black,
+            fgColor: ThemeColor.palette.gray900,
+            borderColor: ThemeColor.palette.gray500,
             borderStyle: "solid",
             borderWidth: 1,
             _hover: {
-                bgColor: ThemeColor.palette.gray200,
-                fgColor: ThemeColor.palette.black,
-                borderColor: ThemeColor.palette.black,
+                bgColor: ThemeColor.palette.gray50,
+                fgColor: ThemeColor.palette.gray900,
+                borderColor: ThemeColor.palette.gray900,
                 borderStyle: "solid",
                 borderWidth: 1,
             }
         },
         dashed: {
             bgColor: "transparent",
-            fgColor: ThemeColor.palette.black,
-            borderColor: ThemeColor.palette.black,
+            fgColor: ThemeColor.palette.gray900,
+            borderColor: ThemeColor.palette.gray500,
             borderStyle: "dashed",
             borderWidth: 1,
             _hover: {
-                bgColor: "transparent",
-                fgColor: ThemeColor.palette.gray200,
-                borderColor: ThemeColor.palette.black,
+                bgColor: ThemeColor.palette.gray50,
+                fgColor: ThemeColor.palette.gray900,
+                borderColor: ThemeColor.palette.gray900,
                 borderStyle: "dashed",
                 borderWidth: 1,
             }
@@ -98,13 +99,13 @@ export const ThemeButton: IThemeButton = {
     },
     shape: {
         normal: { radius: 5 },
-        rounded: { radius: "33%" },
+        rounded: { radius: "40px" },
         circle: { radius: "50%" }
     },
     shadow: {
-        value: ThemeShadow[3],
+        value: ThemeShadow[2],
         _hover: {
-            value: ThemeShadow[5]
+            value: ThemeShadow[3]
         }
     }
 }

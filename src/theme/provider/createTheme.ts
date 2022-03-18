@@ -21,14 +21,14 @@ export const createTheme = <T extends IThemeSpecs = IThemeSpecs>(propsFunc: ICre
         ...others
     } = propsFunc(DefaultThemeSpecs);
 
-    let _color = merge(DefaultThemeSpecs.color, color);
-    let _spacing = merge(DefaultThemeSpecs.spacing, spacing);
-    let _fontFamily = merge(DefaultThemeSpecs.fontFamily, fontFamily);
-    let _fontSize = merge(DefaultThemeSpecs.fontSize, fontSize);
+    let _color = merge({}, DefaultThemeSpecs.color, color);
+    let _spacing = merge({}, DefaultThemeSpecs.spacing, spacing);
+    let _fontFamily = merge({}, DefaultThemeSpecs.fontFamily, fontFamily);
+    let _fontSize = merge({}, DefaultThemeSpecs.fontSize, fontSize);
     let _breakpoint = Object.assign({}, DefaultThemeSpecs.breakpoint, breakpoint);
-    let _shadow = merge(DefaultThemeSpecs.shadow, shadow);
+    let _shadow = merge({}, DefaultThemeSpecs.shadow, shadow);
 
-    let _components = merge(DefaultThemeSpecs.components, components);
+    let _components = merge({}, DefaultThemeSpecs.components, components);
 
     return {
         color: _color,

@@ -1,5 +1,5 @@
 import { ResponsiveValue } from "@theme/responsive/types";
-import { BorderStyle, IBgColorProps, IBorderProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props";
+import { BorderStyle, IBgColorProps, IBorderProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props/props";
 
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonShape = "normal" | "rounded" | "circle";
@@ -40,6 +40,7 @@ export interface IButtonStyleProps extends
     size?: ResponsiveValue<ButtonSize>;
     shape?: ResponsiveValue<ButtonShape>;
     type?: ResponsiveValue<ButtonType>;
+    disabledElevation?: boolean;
 }
 
 export interface IThemeButton {

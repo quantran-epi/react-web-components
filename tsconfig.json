@@ -21,7 +21,7 @@
       "@theme/specs/default": ["./src/theme/specs/default/index"],
       "@theme/provider": ["./src/theme/provider/index"],
       "@theme/responsive/*": ["./src/theme/responsive/*"],
-      "@theme/style-props": ["./src/theme/style-props/index"],
+      "@theme/style-props/*": ["./src/theme/style-props/*"],
       "@theme/types": ["./src/theme/types/index"],
       "@theme/functions": ["./src/theme/functions/index"]
     }

@@ -7,8 +7,8 @@ export * from './IClassNameProps';
 export * from './ISystemOverrideProps';
 
 // pseudo props
-export * from './pseudo/IHoverProps';
-export * from './pseudo/IFocusProps';
-export * from './pseudo/IActiveProps';
-export * from './pseudo/IBeforeProps';
-export * from './pseudo/IAfterProps';
+export * from './pseudo-class/IHoverProps';
+export * from './pseudo-class/IFocusProps';
+export * from './pseudo-class/IActiveProps';
+export * from './pseudo-element/IBeforeProps';
+export * from './pseudo-element/IAfterProps';

@@ -4,7 +4,7 @@ module.exports = {
     stories: ["../src/components/**/*.stories.tsx"],
     // Add any Storybook addons you want here: https://storybook.js.org/addons/
     addons: [
-        "@storybook/addon-viewport"
+        "@storybook/addon-viewport",
     ],
     webpackFinal: async (config) => {
         config.module.rules.push({
@@ -12,7 +12,7 @@ module.exports = {
             loader: require.resolve("babel-loader"),
         });
         config.resolve.extensions.push(".ts", ".tsx");
-       
+
         return config;
     }
 };
