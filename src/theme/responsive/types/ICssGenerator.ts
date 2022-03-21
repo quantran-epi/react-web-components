@@ -1,10 +1,12 @@
 import { ResponsiveValue } from '@theme/responsive/types';
-import { IBorderProps, IMarginProps, IPaddingProps } from "@theme/style-props/props";
+import { IBgColorProps, IBorderProps, IMarginProps, IPaddingProps, ISquareSizeProps } from "@theme/style-props/props";
 
 export interface ICssPropsGeneratorItemCollection {
     margin?: IMarginProps;
     padding?: IPaddingProps;
     border?: IBorderProps;
+    bgColor?: IBgColorProps;
+    squareSize?: ISquareSizeProps;
     css?: ResponsiveValue<string>;
 }
 

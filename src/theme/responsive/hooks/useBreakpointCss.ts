@@ -1,6 +1,6 @@
 import { useTheme } from "@theme/provider";
 import { uniq } from "lodash";
-import { BreakpointType, BreakpointValues, ICssResponsiveProp, PseudoSelectorType, ResponsiveValue } from "../types";
+import { BreakpointType, ICssResponsiveProp, PseudoSelectorType, ResponsiveValue } from "../types";
 import { useCssProperty } from "./useCssProperty";
 import { useMediaQuery } from "./useMediaQuery";
 import { useResponsiveValue } from "./useResponsiveValue";
@@ -34,8 +34,12 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         breakpoints: theme.specs.breakpoint.values,
         step: theme.specs.breakpoint.step
     });
-    const CssProperty = useCssProperty();
     const ResponsiveValue = useResponsiveValue();
+    const { getValueWithUnit } = useCssProperty();
+
+    const _getString = (propName: string, propValue: string) => {
+        return `${propName}:${propValue};`
+    }
 
     const _getBreakpoints = (prop: ICssResponsiveProp): string[] => {
         let { value } = prop;
@@ -84,7 +88,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             propName: name,
             unit: unit,
             breakpointValues: ResponsiveValue.transformBreakpointValues(ResponsiveValue
-                .getBreakpointValues(value), (value) => CssProperty.getValueWithUnit(value, unit))
+                .getBreakpointValues(value), (value) => getValueWithUnit(value, unit))
         }
     }
 
@@ -104,7 +108,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         listCssPropBreakpointValue.forEach(cssProp => {
             breakpointGroups.forEach(breakpointGroup => {
                 if (cssProp.breakpointValues[breakpointGroup.breakpoint] !== undefined)
-                    breakpointGroup.cssList.push(CssProperty.getString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint]));
+                    breakpointGroup.cssList.push(_getString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint]));
             })
         })
 
@@ -117,7 +121,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             .filter(cssProp => typeof cssProp.breakpointValues === "string" ||
                 typeof cssProp.breakpointValues === "number")
             .forEach(cssProp => {
-                noneBreakpointGroup.cssList.push(CssProperty.getString(cssProp.propName, cssProp.breakpointValues as string));
+                noneBreakpointGroup.cssList.push(_getString(cssProp.propName, cssProp.breakpointValues as string));
             });
         return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }

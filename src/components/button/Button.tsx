@@ -2,51 +2,28 @@ import classNames from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
 import { ComponentClassNames } from '../base/constants';
-import { usePropResolution } from '../base/hooks';
 import { useButtonStyle } from './Button.style';
 import { IButtonProps, IStyledButtonProps } from './Button.types';
 
 const StyledButton = styled.button<IStyledButtonProps>`
     ${props => props.componentCss}
 `
-export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({
-    children,
-    className,
-    size,
-    shape,
-    type,
-    bgColor,
-
-    htmlType,
-    onClick,
-    href,
-    target,
-    ...props
-}, ref) => {
-    const { getStyleProps, omitProps } = usePropResolution();
-    const styleProps = getStyleProps(props);
-    const nativeProps = omitProps(props, styleProps);
-    const { css: _buttonCss } = useButtonStyle({
-        size,
-        shape,
-        type,
-        bgColor,
-        ...styleProps
-    });
+export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>((props, ref) => {
+    const { css: _buttonCss } = useButtonStyle(props);
 
     const _handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        if (!onClick) return;
-        if (!(onClick instanceof Function)) console.warn("onClick should be a function");
-        onClick(e);
+        if (!props.onClick) return;
+        if (!(props.onClick instanceof Function)) console.warn("onClick should be a function");
+        props.onClick(e);
     }, [])
 
     return <StyledButton
         ref={ref}
         componentCss={_buttonCss}
-        className={classNames(ComponentClassNames.button, className)}
+        className={classNames(ComponentClassNames.button, props.className)}
         onClick={_handleClick}
-        {...nativeProps}>
-        {children}
+        {...props.native}>
+        {props.children}
     </StyledButton>
 })
 

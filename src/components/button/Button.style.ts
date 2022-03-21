@@ -1,10 +1,10 @@
 import { useTheme } from "@theme/provider";
-import { useBreakpointCss, useResponsiveValue, useStylePropsCss } from "@theme/responsive/hooks";
-import { IButtonStyleProps } from "@theme/specs/abstract/components";
+import { useBreakpointCss, useCssProperty, useResponsiveValue, useStylePropsCss } from "@theme/responsive/hooks";
 import { merge } from "lodash";
 import { IComponentStyleHook } from "../base/types";
+import { IButtonProps } from "./Button.types";
 
-interface IUseButtonStyleProps extends Partial<IButtonStyleProps> {
+interface IUseButtonStyleProps extends Partial<IButtonProps> {
 
 }
 
@@ -16,31 +16,34 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
     const StylePropsCss = useStylePropsCss();
     const ResponsiveValue = useResponsiveValue();
     const BreakpointCss = useBreakpointCss();
+    const { cursor, shadow, border, transition, bgColor, _hover } = useCssProperty();
     const { theme } = useTheme();
-    let {
-        _hover,
-        bgColor,
-        size,
-        shape,
-        type,
-        sx,
-        disabledElevation,
-        ...restProps
-    } = merge({}, theme.specs.components.button.defaultProps, props);
+    const mergeProps = merge({}, theme.specs.components.button.defaultProps, props);
 
     const _defaultStyle = (): string => {
         return `
-            border: none;
-            background-color: transparent;
-            box-shadow: ${(type !== "primary" || disabledElevation) ? "none" : theme.specs.components.button.shadow.value};
-            :hover {
-                box-shadow: ${(type !== "primary" || disabledElevation) ? "none" : theme.specs.components.button.shadow._hover.value};
-            }
+            ${border(() => "none")}
+            ${bgColor(() => "transparent")}
+            ${transition(() => ({
+            duration: 0.1,
+            property: "all",
+            timingFunc: "ease-in-out"
+        }))}
+            ${cursor(() =>
+            mergeProps.disabled ? "not-allowed" : "pointer")}
+            ${shadow(() =>
+                (mergeProps.type !== "primary" || mergeProps.disabledElevation)
+                    ? "none" : theme.specs.components.button.shadow.value)}
+            ${_hover(() => `
+                ${shadow(() =>
+                        (mergeProps.type !== "primary" || mergeProps.disabledElevation)
+                            ? "none" : theme.specs.components.button.shadow._hover.value)}
+            `)}
         `
     }
 
-    const _type = (): string => {
-        let _normalProps = ResponsiveValue.Union.getResponsiveProps(type, {
+    const _typeCss = (): string => {
+        let _normalProps = ResponsiveValue.Union.getResponsiveProps(mergeProps.type, {
             primary: [
                 { name: 'color', value: theme.specs.components.button.type.primary.fgColor },
                 { name: 'background-color', value: theme.specs.components.button.type.primary.bgColor },
@@ -77,7 +80,7 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
                 { name: 'border-width', value: theme.specs.components.button.type.outlined.borderWidth },
             ],
         }, "primary");
-        let _hoverProps = ResponsiveValue.Union.getResponsiveProps(type, {
+        let _hoverProps = ResponsiveValue.Union.getResponsiveProps(mergeProps.type, {
             primary: [
                 { name: 'color', value: theme.specs.components.button.type.primary._hover.fgColor },
                 { name: 'background-color', value: theme.specs.components.button.type.primary._hover.bgColor },
@@ -119,8 +122,8 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
             .concat(BreakpointCss.fromProps(_hoverProps, ":hover"));
     }
 
-    const _size = (): string => {
-        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(size, {
+    const _sizeCss = (): string => {
+        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(mergeProps.size, {
             sm: [
                 { name: "padding", value: theme.specs.components.button.size.sm.padding },
                 { name: "font-size", value: theme.specs.components.button.size.sm.fontSize }
@@ -136,64 +139,91 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
         }, "md"));
     }
 
-    const _shape = (): string => {
-        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(shape, {
+    const _shapeCss = (): string => {
+        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(mergeProps.shape, {
             normal: [{ name: "border-radius", value: theme.specs.components.button.shape.normal.radius }],
             circle: [{ name: "border-radius", value: theme.specs.components.button.shape.circle.radius }],
             rounded: [{ name: "border-radius", value: theme.specs.components.button.shape.rounded.radius }]
         }, "normal"))
     }
 
-    const _css = (): string => {
-        debugger
-        let stylePropsCss = StylePropsCss.group({
+    const _stylePropsCss = (): string => {
+        return StylePropsCss.group({
             _hover: {
                 margin: {
-                    margin: _hover?.margin,
-                    marginBottom: _hover?.marginBottom,
-                    marginLeft: _hover?.marginLeft,
-                    marginRight: _hover?.marginRight,
-                    marginTop: _hover?.marginTop,
-                    marginVertical: _hover?.marginVertical,
-                    marginHorizontal: _hover?.marginHorizontal
+                    margin: mergeProps._hover?.margin,
+                    marginBottom: mergeProps._hover?.marginBottom,
+                    marginLeft: mergeProps._hover?.marginLeft,
+                    marginRight: mergeProps._hover?.marginRight,
+                    marginTop: mergeProps._hover?.marginTop,
+                    marginVertical: mergeProps._hover?.marginVertical,
+                    marginHorizontal: mergeProps._hover?.marginHorizontal
                 },
                 padding: {
-                    padding: _hover?.padding,
-                    paddingBottom: _hover?.paddingBottom,
-                    paddingLeft: _hover?.paddingLeft,
-                    paddingRight: _hover?.paddingRight,
-                    paddingTop: _hover?.paddingTop,
-                    paddingVertical: _hover?.paddingVertical,
-                    paddingHorizontal: _hover?.paddingHorizontal
+                    padding: mergeProps._hover?.padding,
+                    paddingBottom: mergeProps._hover?.paddingBottom,
+                    paddingLeft: mergeProps._hover?.paddingLeft,
+                    paddingRight: mergeProps._hover?.paddingRight,
+                    paddingTop: mergeProps._hover?.paddingTop,
+                    paddingVertical: mergeProps._hover?.paddingVertical,
+                    paddingHorizontal: mergeProps._hover?.paddingHorizontal
                 },
-                css: _hover?.sx?.css
+                border: {
+                    border: mergeProps._hover?.border,
+                    borderBottomWidth: mergeProps._hover?.borderBottomWidth,
+                    borderColor: mergeProps._hover?.borderColor,
+                    borderLeftWidth: mergeProps._hover?.borderLeftWidth,
+                    borderRightWidth: mergeProps._hover?.borderRightWidth,
+                    borderStyle: mergeProps._hover?.borderStyle,
+                    borderTopWidth: mergeProps._hover?.borderTopWidth,
+                    borderWidth: mergeProps._hover?.borderWidth
+                },
+                bgColor: {
+                    bgColor: mergeProps._hover?.bgColor,
+                },
+                css: mergeProps._hover?.sx?.css
             },
             margin: {
-                margin: restProps.margin,
-                marginBottom: restProps.marginBottom,
-                marginLeft: restProps.marginLeft,
-                marginRight: restProps.marginRight,
-                marginTop: restProps.marginTop,
-                marginVertical: restProps.marginVertical,
-                marginHorizontal: restProps.marginHorizontal
+                margin: mergeProps.margin,
+                marginBottom: mergeProps.marginBottom,
+                marginLeft: mergeProps.marginLeft,
+                marginRight: mergeProps.marginRight,
+                marginTop: mergeProps.marginTop,
+                marginVertical: mergeProps.marginVertical,
+                marginHorizontal: mergeProps.marginHorizontal
             },
             padding: {
-                padding: restProps.padding,
-                paddingBottom: restProps.paddingBottom,
-                paddingLeft: restProps.paddingLeft,
-                paddingRight: restProps.paddingRight,
-                paddingTop: restProps.paddingTop,
-                paddingVertical: restProps.paddingVertical,
-                paddingHorizontal: restProps.paddingHorizontal
+                padding: mergeProps.padding,
+                paddingBottom: mergeProps.paddingBottom,
+                paddingLeft: mergeProps.paddingLeft,
+                paddingRight: mergeProps.paddingRight,
+                paddingTop: mergeProps.paddingTop,
+                paddingVertical: mergeProps.paddingVertical,
+                paddingHorizontal: mergeProps.paddingHorizontal
             },
-            css: sx?.css
+            border: {
+                border: mergeProps.border,
+                borderBottomWidth: mergeProps.borderBottomWidth,
+                borderColor: mergeProps.borderColor,
+                borderLeftWidth: mergeProps.borderLeftWidth,
+                borderRightWidth: mergeProps.borderRightWidth,
+                borderStyle: mergeProps.borderStyle,
+                borderTopWidth: mergeProps.borderTopWidth,
+                borderWidth: mergeProps.borderWidth
+            },
+            bgColor: {
+                bgColor: mergeProps.bgColor,
+            },
+            css: mergeProps.sx?.css
         })
+    }
 
+    const _css = (): string => {
         return _defaultStyle()
-            .concat(_type())
-            .concat(_size())
-            .concat(_shape())
-            .concat(stylePropsCss);
+            .concat(_typeCss())
+            .concat(_sizeCss())
+            .concat(_shapeCss())
+            .concat(_stylePropsCss());
     }
 
     return {

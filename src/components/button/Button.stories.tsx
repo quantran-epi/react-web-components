@@ -20,11 +20,7 @@ export default {
 // }
 
 export const ButtonSize = () => <React.Fragment>
-    <Button size={"sm"} marginHorizontal={10} _hover={{
-        sx: {
-            css: `color: red;`
-        }
-    }}>Small Button</Button>
+    <Button size={"sm"} marginHorizontal={10}>Small Button</Button>
     <Button marginHorizontal={10}>Medium Button</Button>
     <Button size={"lg"} marginHorizontal={10}>Large Button</Button>
     <Button size={["sm", "md", "lg"]}>Button Responsive</Button>
