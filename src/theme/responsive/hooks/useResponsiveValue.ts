@@ -9,6 +9,7 @@ interface IUseResponsiveValueProps {
 }
 
 interface IUseResponsiveValue {
+    getValueAt: <I extends string | number | symbol>(value: ResponsiveValue<I>, breakpoint: BreakpointType) => I | undefined;
     getBreakpointValues: <T extends string | number>(value: ResponsiveValue<T>) => T | BreakpointValues<T>;
     transformBreakpointValues: <I extends string | number, O>(value: I | BreakpointValues<I>,
         transformer: BreakpointValuesTransformer<I, O>) => O | BreakpointValues<O>;
@@ -265,6 +266,7 @@ export const useResponsiveValue = (props?: IUseResponsiveValueProps): IUseRespon
     }
 
     return {
+        getValueAt: _getValueAt,
         getBreakpointValues: _getBreakpointValues,
         transformBreakpointValues: _transformBreakpointValues,
         Union: {

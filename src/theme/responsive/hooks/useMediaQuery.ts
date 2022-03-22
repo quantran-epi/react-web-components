@@ -1,3 +1,4 @@
+import { useBreakpoint } from '@theme/responsive/hooks';
 import { BreakpointType, BreakpointValueObject } from "../types";
 
 interface IUseMediaQueryProps {
@@ -14,19 +15,11 @@ interface IUseMediaQuery {
     sortKeys: BreakpointType[];
 }
 
-const sortBreakpointsValues = (breakpoints: BreakpointValueObject) => {
-    const breakpointsAsArray = Object.keys(breakpoints).map((key) => ({ key, val: breakpoints[key] })) || [];
-    // Sort in ascending order
-    breakpointsAsArray.sort((breakpoint1, breakpoint2) => breakpoint1.val - breakpoint2.val);
-    return breakpointsAsArray.reduce((acc, obj) => {
-        return { ...acc, [obj.key]: obj.val };
-    }, {});
-};
-
 export const useMediaQuery = ({
     breakpoints,
     step
 }: IUseMediaQueryProps): IUseMediaQuery => {
+    const { sortBreakpointsValues } = useBreakpoint();
     const sortedValues = sortBreakpointsValues(breakpoints);
     const keys = Object.keys(sortedValues) as BreakpointType[];
     const unit = "px";

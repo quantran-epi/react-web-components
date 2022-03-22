@@ -1,6 +1,5 @@
 import { useTheme } from "@theme/provider";
-import { useBreakpointCss, useCssProperty, useResponsiveValue, useStylePropsCss } from "@theme/responsive/hooks";
-import { merge } from "lodash";
+import { useCssProperty, useResponsiveCss, useResponsiveValue, useStylePropsCss } from "@theme/responsive/hooks";
 import { IComponentStyleHook } from "../base/types";
 import { IButtonProps } from "./Button.types";
 
@@ -15,35 +14,44 @@ interface IUseButtonStyle extends IComponentStyleHook {
 export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => {
     const StylePropsCss = useStylePropsCss();
     const ResponsiveValue = useResponsiveValue();
-    const BreakpointCss = useBreakpointCss();
-    const { cursor, shadow, border, transition, bgColor, _hover } = useCssProperty();
+    const ResponsiveCss = useResponsiveCss();
+    const {
+        cursor, shadow, border, transition, bgColor, _hover, _active, scale, overflow, position
+    } = useCssProperty();
     const { theme } = useTheme();
-    const mergeProps = merge({}, theme.specs.components.button.defaultProps, props);
 
     const _defaultStyle = (): string => {
-        return `
-            ${border(() => "none")}
-            ${bgColor(() => "transparent")}
-            ${transition(() => ({
+        let css = [];
+        if (props.ripple)
+            css.push(overflow(() => ({
+                both: "hidden"
+            })));
+        css.push(position(() => "relative"));
+        css.push(border(() => "none"));
+        css.push(bgColor(() => "transparent"));
+        css.push(transition(() => ({
             duration: 0.1,
             property: "all",
             timingFunc: "ease-in-out"
-        }))}
-            ${cursor(() =>
-            mergeProps.disabled ? "not-allowed" : "pointer")}
-            ${shadow(() =>
-                (mergeProps.type !== "primary" || mergeProps.disabledElevation)
-                    ? "none" : theme.specs.components.button.shadow.value)}
-            ${_hover(() => `
+        })));
+        css.push(cursor(() =>
+            props.disabled ? "not-allowed" : "pointer"));
+        css.push(shadow(() =>
+            (props.type !== "primary" || props.disabledElevation)
+                ? "none" : theme.specs.components.button.shadow.value));
+        css.push(_hover(() => `
                 ${shadow(() =>
-                        (mergeProps.type !== "primary" || mergeProps.disabledElevation)
-                            ? "none" : theme.specs.components.button.shadow._hover.value)}
-            `)}
-        `
+            (props.type !== "primary" || props.disabledElevation)
+                ? "none" : theme.specs.components.button.shadow._hover.value)}
+            `));
+        css.push((props.type === "primary" && !props.disabledElevation) ? _active(() => `
+            ${shadow(() => theme.specs.shadow[2])}
+            ${scale(() => 0.99)}`) : '');
+        return css.join("");
     }
 
     const _typeCss = (): string => {
-        let _normalProps = ResponsiveValue.Union.getResponsiveProps(mergeProps.type, {
+        let _normalProps = ResponsiveValue.Union.getResponsiveProps(props.type, {
             primary: [
                 { name: 'color', value: theme.specs.components.button.type.primary.fgColor },
                 { name: 'background-color', value: theme.specs.components.button.type.primary.bgColor },
@@ -80,7 +88,7 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
                 { name: 'border-width', value: theme.specs.components.button.type.outlined.borderWidth },
             ],
         }, "primary");
-        let _hoverProps = ResponsiveValue.Union.getResponsiveProps(mergeProps.type, {
+        let _hoverProps = ResponsiveValue.Union.getResponsiveProps(props.type, {
             primary: [
                 { name: 'color', value: theme.specs.components.button.type.primary._hover.fgColor },
                 { name: 'background-color', value: theme.specs.components.button.type.primary._hover.bgColor },
@@ -118,12 +126,12 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
             ],
         }, "primary");
 
-        return BreakpointCss.fromProps(_normalProps)
-            .concat(BreakpointCss.fromProps(_hoverProps, ":hover"));
+        return ResponsiveCss.fromProps(_normalProps)
+            .concat(ResponsiveCss.fromProps(_hoverProps, ":hover"));
     }
 
     const _sizeCss = (): string => {
-        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(mergeProps.size, {
+        return ResponsiveCss.fromProps(ResponsiveValue.Union.getResponsiveProps(props.size, {
             sm: [
                 { name: "padding", value: theme.specs.components.button.size.sm.padding },
                 { name: "font-size", value: theme.specs.components.button.size.sm.fontSize }
@@ -140,7 +148,7 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
     }
 
     const _shapeCss = (): string => {
-        return BreakpointCss.fromProps(ResponsiveValue.Union.getResponsiveProps(mergeProps.shape, {
+        return ResponsiveCss.fromProps(ResponsiveValue.Union.getResponsiveProps(props.shape, {
             normal: [{ name: "border-radius", value: theme.specs.components.button.shape.normal.radius }],
             circle: [{ name: "border-radius", value: theme.specs.components.button.shape.circle.radius }],
             rounded: [{ name: "border-radius", value: theme.specs.components.button.shape.rounded.radius }]
@@ -151,70 +159,70 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
         return StylePropsCss.group({
             _hover: {
                 margin: {
-                    margin: mergeProps._hover?.margin,
-                    marginBottom: mergeProps._hover?.marginBottom,
-                    marginLeft: mergeProps._hover?.marginLeft,
-                    marginRight: mergeProps._hover?.marginRight,
-                    marginTop: mergeProps._hover?.marginTop,
-                    marginVertical: mergeProps._hover?.marginVertical,
-                    marginHorizontal: mergeProps._hover?.marginHorizontal
+                    margin: props._hover?.margin,
+                    marginBottom: props._hover?.marginBottom,
+                    marginLeft: props._hover?.marginLeft,
+                    marginRight: props._hover?.marginRight,
+                    marginTop: props._hover?.marginTop,
+                    marginVertical: props._hover?.marginVertical,
+                    marginHorizontal: props._hover?.marginHorizontal
                 },
                 padding: {
-                    padding: mergeProps._hover?.padding,
-                    paddingBottom: mergeProps._hover?.paddingBottom,
-                    paddingLeft: mergeProps._hover?.paddingLeft,
-                    paddingRight: mergeProps._hover?.paddingRight,
-                    paddingTop: mergeProps._hover?.paddingTop,
-                    paddingVertical: mergeProps._hover?.paddingVertical,
-                    paddingHorizontal: mergeProps._hover?.paddingHorizontal
+                    padding: props._hover?.padding,
+                    paddingBottom: props._hover?.paddingBottom,
+                    paddingLeft: props._hover?.paddingLeft,
+                    paddingRight: props._hover?.paddingRight,
+                    paddingTop: props._hover?.paddingTop,
+                    paddingVertical: props._hover?.paddingVertical,
+                    paddingHorizontal: props._hover?.paddingHorizontal
                 },
                 border: {
-                    border: mergeProps._hover?.border,
-                    borderBottomWidth: mergeProps._hover?.borderBottomWidth,
-                    borderColor: mergeProps._hover?.borderColor,
-                    borderLeftWidth: mergeProps._hover?.borderLeftWidth,
-                    borderRightWidth: mergeProps._hover?.borderRightWidth,
-                    borderStyle: mergeProps._hover?.borderStyle,
-                    borderTopWidth: mergeProps._hover?.borderTopWidth,
-                    borderWidth: mergeProps._hover?.borderWidth
+                    border: props._hover?.border,
+                    borderBottomWidth: props._hover?.borderBottomWidth,
+                    borderColor: props._hover?.borderColor,
+                    borderLeftWidth: props._hover?.borderLeftWidth,
+                    borderRightWidth: props._hover?.borderRightWidth,
+                    borderStyle: props._hover?.borderStyle,
+                    borderTopWidth: props._hover?.borderTopWidth,
+                    borderWidth: props._hover?.borderWidth
                 },
                 bgColor: {
-                    bgColor: mergeProps._hover?.bgColor,
+                    bgColor: props._hover?.bgColor,
                 },
-                css: mergeProps._hover?.sx?.css
+                css: props._hover?.sx?.css
             },
             margin: {
-                margin: mergeProps.margin,
-                marginBottom: mergeProps.marginBottom,
-                marginLeft: mergeProps.marginLeft,
-                marginRight: mergeProps.marginRight,
-                marginTop: mergeProps.marginTop,
-                marginVertical: mergeProps.marginVertical,
-                marginHorizontal: mergeProps.marginHorizontal
+                margin: props.margin,
+                marginBottom: props.marginBottom,
+                marginLeft: props.marginLeft,
+                marginRight: props.marginRight,
+                marginTop: props.marginTop,
+                marginVertical: props.marginVertical,
+                marginHorizontal: props.marginHorizontal
             },
             padding: {
-                padding: mergeProps.padding,
-                paddingBottom: mergeProps.paddingBottom,
-                paddingLeft: mergeProps.paddingLeft,
-                paddingRight: mergeProps.paddingRight,
-                paddingTop: mergeProps.paddingTop,
-                paddingVertical: mergeProps.paddingVertical,
-                paddingHorizontal: mergeProps.paddingHorizontal
+                padding: props.padding,
+                paddingBottom: props.paddingBottom,
+                paddingLeft: props.paddingLeft,
+                paddingRight: props.paddingRight,
+                paddingTop: props.paddingTop,
+                paddingVertical: props.paddingVertical,
+                paddingHorizontal: props.paddingHorizontal
             },
             border: {
-                border: mergeProps.border,
-                borderBottomWidth: mergeProps.borderBottomWidth,
-                borderColor: mergeProps.borderColor,
-                borderLeftWidth: mergeProps.borderLeftWidth,
-                borderRightWidth: mergeProps.borderRightWidth,
-                borderStyle: mergeProps.borderStyle,
-                borderTopWidth: mergeProps.borderTopWidth,
-                borderWidth: mergeProps.borderWidth
+                border: props.border,
+                borderBottomWidth: props.borderBottomWidth,
+                borderColor: props.borderColor,
+                borderLeftWidth: props.borderLeftWidth,
+                borderRightWidth: props.borderRightWidth,
+                borderStyle: props.borderStyle,
+                borderTopWidth: props.borderTopWidth,
+                borderWidth: props.borderWidth
             },
             bgColor: {
-                bgColor: mergeProps.bgColor,
+                bgColor: props.bgColor,
             },
-            css: mergeProps.sx?.css
+            css: props.sx?.css
         })
     }
 

@@ -1,3 +1,5 @@
+import { ThemeColorPalette, ThemeShortHandColor } from '@theme/specs/abstract/base';
+import { LiteralUnion } from 'type-fest';
 import { ResponsiveValue } from "@theme/responsive/types";
 import { BorderStyle, IBgColorProps, IBorderProps, IHoverProps, IMarginProps, IPaddingProps, ISystemOverrideProps } from "@theme/style-props/props";
 
@@ -20,6 +22,10 @@ interface ButtonTypeStyle {
     borderColor: string;
     borderStyle: BorderStyle;
     borderWidth: number;
+    ripple: {
+        enabled: boolean;
+        color?: LiteralUnion<keyof ThemeShortHandColor | keyof ThemeColorPalette, string>;
+    }
 }
 
 interface ButtonShadowStyle {
@@ -41,12 +47,14 @@ export interface IButtonStyleProps extends
     shape?: ResponsiveValue<ButtonShape>;
     type?: ResponsiveValue<ButtonType>;
     disabledElevation?: boolean;
+    ripple?: boolean;
+    rippleColor?: LiteralUnion<keyof ThemeShortHandColor | keyof ThemeColorPalette, string>;
 }
 
 export interface IThemeButton {
     defaultProps: IButtonStyleProps;
     size: Record<ButtonSize, ButtonSizeStyle>;
     shape: Record<ButtonShape, ButtonShapeStyle>;
-    type: Record<ButtonType, ButtonTypeStyle & IHoverProps<ButtonTypeStyle>>;
+    type: Record<ButtonType, ButtonTypeStyle & IHoverProps<Omit<ButtonTypeStyle, "ripple">>>;
     shadow: ButtonShadowStyle & IHoverProps<ButtonShadowStyle>;
 }

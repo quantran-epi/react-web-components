@@ -1,7 +1,7 @@
 import { IBgColorProps, IBorderProps, IMarginProps, IPaddingProps, ISquareSizeProps } from '@theme/style-props/props';
 import { CssPropertyNames } from '../constants';
 import { ICssPropsGenerator, ICssPropsGeneratorParams, ICssResponsiveProp } from '../types';
-import { useBreakpointCss } from "./useBreakpointCss";
+import { useResponsiveCss } from "./useResponsiveCss";
 
 interface IUseStylePropsCssProps {
 }
@@ -11,7 +11,7 @@ interface IUseStylePropsCss {
 }
 
 export const useStylePropsCss = (props?: IUseStylePropsCssProps): IUseStylePropsCss => {
-    const BreakpointCss = useBreakpointCss();
+    const ResponsiveCss = useResponsiveCss();
 
     const _group = (params: ICssPropsGeneratorParams): string => {
         let _cssProps: ICssResponsiveProp[] = [];
@@ -44,16 +44,16 @@ export const useStylePropsCss = (props?: IUseStylePropsCssProps): IUseStyleProps
         _focusCssProps.push(...getSquareSizeCssProps(params?._focus?.squareSize));
 
         let _css = [];
-        if (params?.css !== undefined) _css.push(BreakpointCss.fromString(params.css));
-        if (params?._hover?.css !== undefined) _css.push(BreakpointCss.fromString(params._hover.css, ":hover"));
-        if (params?._active?.css !== undefined) _css.push(BreakpointCss.fromString(params._hover.css, ":active"));
-        if (params?._focus?.css !== undefined) _css.push(BreakpointCss.fromString(params._hover.css, ":focus"));
+        if (params?.css !== undefined) _css.push(ResponsiveCss.fromString(params.css));
+        if (params?._hover?.css !== undefined) _css.push(ResponsiveCss.fromString(params._hover.css, ":hover"));
+        if (params?._active?.css !== undefined) _css.push(ResponsiveCss.fromString(params._hover.css, ":active"));
+        if (params?._focus?.css !== undefined) _css.push(ResponsiveCss.fromString(params._hover.css, ":focus"));
 
-        return BreakpointCss.fromProps(_cssProps)
-            .concat(BreakpointCss.fromProps(_hoverCssProps, ":hover"))
-            .concat(BreakpointCss.fromProps(_activeCssProps, ":active"))
-            .concat(BreakpointCss.fromProps(_focusCssProps, ":focus"))
-            .concat(_css.join());
+        return ResponsiveCss.fromProps(_cssProps)
+            .concat(ResponsiveCss.fromProps(_hoverCssProps, ":hover"))
+            .concat(ResponsiveCss.fromProps(_activeCssProps, ":active"))
+            .concat(ResponsiveCss.fromProps(_focusCssProps, ":focus"))
+            .concat(_css.join(""));
     }
 
     const getMarginResponsiveProps = (props?: IMarginProps): ICssResponsiveProp[] => {

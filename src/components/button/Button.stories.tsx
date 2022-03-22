@@ -1,4 +1,3 @@
-import { createTheme } from "@theme/provider";
 import React from "react";
 import { Button } from './Button';
 
@@ -40,5 +39,17 @@ export const ButtonShape = () => <React.Fragment>
     <Button shape={"rounded"} marginHorizontal={10}>Rounded Button</Button>
     <Button shape={"circle"} marginHorizontal={10}>Circle Button</Button>
     <Button shape={["normal", "circle", "rounded"]} marginHorizontal={10}>Button Responsive</Button>
+</React.Fragment>
+
+export const DisableRipple = () => <React.Fragment>
+    <Button size={"sm"} marginHorizontal={10} ripple={false}>Small Button</Button>
+    <Button marginHorizontal={10} ripple={false}>Medium Button</Button>
+    <Button size={"lg"} marginHorizontal={10} ripple={false}>Large Button</Button>
+</React.Fragment>
+
+export const DisableElevation = () => <React.Fragment>
+    <Button size={"sm"} marginHorizontal={10} disabledElevation>Small Button</Button>
+    <Button marginHorizontal={10} disabledElevation>Medium Button</Button>
+    <Button size={"lg"} marginHorizontal={10} disabledElevation>Large Button</Button>
 </React.Fragment>
 

@@ -20,26 +20,22 @@ interface ICssBreakpointGroup {
     cssList: string[];
 }
 
-interface IUseBreakpointCssProps {
+interface IUseResponsiveCssProps {
 }
 
-interface IUseBreakpointCss {
+interface IUseResponsiveCss {
     fromProps: (props: ICssResponsiveProp[], pseudo?: PseudoSelectorType) => string;
     fromString: (cssString: ResponsiveValue<string>, pseudo?: PseudoSelectorType) => string;
 }
 
-export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpointCss => {
+export const useResponsiveCss = (props?: IUseResponsiveCssProps): IUseResponsiveCss => {
     const { theme } = useTheme();
     const { above, between, only, sortKeys } = useMediaQuery({
         breakpoints: theme.specs.breakpoint.values,
         step: theme.specs.breakpoint.step
     });
     const ResponsiveValue = useResponsiveValue();
-    const { getValueWithUnit } = useCssProperty();
-
-    const _getString = (propName: string, propValue: string) => {
-        return `${propName}:${propValue};`
-    }
+    const { getValueWithUnit, getString } = useCssProperty();
 
     const _getBreakpoints = (prop: ICssResponsiveProp): string[] => {
         let { value } = prop;
@@ -108,7 +104,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
         listCssPropBreakpointValue.forEach(cssProp => {
             breakpointGroups.forEach(breakpointGroup => {
                 if (cssProp.breakpointValues[breakpointGroup.breakpoint] !== undefined)
-                    breakpointGroup.cssList.push(_getString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint]));
+                    breakpointGroup.cssList.push(getString(cssProp.propName, cssProp.breakpointValues[breakpointGroup.breakpoint]));
             })
         })
 
@@ -121,7 +117,7 @@ export const useBreakpointCss = (props?: IUseBreakpointCssProps): IUseBreakpoint
             .filter(cssProp => typeof cssProp.breakpointValues === "string" ||
                 typeof cssProp.breakpointValues === "number")
             .forEach(cssProp => {
-                noneBreakpointGroup.cssList.push(_getString(cssProp.propName, cssProp.breakpointValues as string));
+                noneBreakpointGroup.cssList.push(getString(cssProp.propName, cssProp.breakpointValues as string));
             });
         return [noneBreakpointGroup, ...breakpointGroups].filter(e => e.cssList.length !== 0); // remove empty breakpoint group
     }

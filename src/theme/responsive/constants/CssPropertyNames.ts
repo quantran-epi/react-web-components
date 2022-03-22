@@ -27,6 +27,12 @@ export const CssPropertyNames = {
     shadow: "box-shadow",
     cursor: "cursor",
     bgColor: "background-color",
+    fontSize: "font-size",
+    transform: "transform",
+    position: "position",
+    overflow: "overflow",
+    overflowX: "overflow-x",
+    overflowY: "overflow-y",
 
     pseudoClasses: {
         hover: ":hover",

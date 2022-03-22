@@ -9,7 +9,8 @@ export const ThemeButton: IThemeButton = {
         size: "md",
         shape: "normal",
         type: "primary",
-        disabledElevation: false
+        disabledElevation: false,
+        ripple: true
     },
     type: {
         primary: {
@@ -18,6 +19,10 @@ export const ThemeButton: IThemeButton = {
             borderColor: "",
             borderStyle: "none",
             borderWidth: 0,
+            ripple: {
+                enabled: true,
+                color: ThemeColor.palette.primary100
+            },
             _hover: {
                 bgColor: ThemeColor.palette.primary300,
                 fgColor: ThemeColor.contrastMapper["primary"],
@@ -32,6 +37,10 @@ export const ThemeButton: IThemeButton = {
             borderColor: "",
             borderStyle: "none",
             borderWidth: 0,
+            ripple: {
+                enabled: true,
+                color: ThemeColor.palette.gray400
+            },
             _hover: {
                 bgColor: ThemeColor.palette.gray200,
                 fgColor: ThemeColor.palette.gray900,
@@ -46,6 +55,10 @@ export const ThemeButton: IThemeButton = {
             borderColor: ThemeColor.palette.gray500,
             borderStyle: "solid",
             borderWidth: 1,
+            ripple: {
+                enabled: true,
+                color: ThemeColor.palette.gray200
+            },
             _hover: {
                 bgColor: ThemeColor.palette.gray50,
                 fgColor: ThemeColor.palette.gray900,
@@ -60,6 +73,10 @@ export const ThemeButton: IThemeButton = {
             borderColor: ThemeColor.palette.gray500,
             borderStyle: "dashed",
             borderWidth: 1,
+            ripple: {
+                enabled: true,
+                color: ThemeColor.palette.gray200
+            },
             _hover: {
                 bgColor: ThemeColor.palette.gray50,
                 fgColor: ThemeColor.palette.gray900,
@@ -74,6 +91,9 @@ export const ThemeButton: IThemeButton = {
             borderColor: "",
             borderStyle: "none",
             borderWidth: 0,
+            ripple: {
+                enabled: false
+            },
             _hover: {
                 bgColor: "transparent",
                 fgColor: ThemeColor.component.linkHover,

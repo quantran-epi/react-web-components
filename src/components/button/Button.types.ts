@@ -23,6 +23,7 @@ export interface IButtonProps extends
     children: React.ReactNode;
     disabled?: boolean;
     native?: NativeButtonProps;
+    innerRef?: React.RefObject<HTMLButtonElement>;
 }
 
 export interface IStyledButtonProps extends IStyledComponentProps {
