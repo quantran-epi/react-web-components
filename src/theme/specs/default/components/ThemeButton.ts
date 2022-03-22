@@ -10,7 +10,8 @@ export const ThemeButton: IThemeButton = {
         shape: "normal",
         type: "primary",
         disabledElevation: false,
-        ripple: true
+        ripple: true,
+        disabled: false
     },
     type: {
         primary: {

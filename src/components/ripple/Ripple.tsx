@@ -1,5 +1,7 @@
+import classNames from 'classnames';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { ComponentClassNames } from '../base/constants';
 import { IRippleCircleStyledProps, IRippleProps } from './Ripple.types';
 
 const rippleScale = keyframes`
@@ -71,7 +73,7 @@ export const Ripple: FunctionComponent<IRippleProps> = ({
         }, 400)
     }
 
-    return <StyledRipple ref={wrapper}>
+    return <StyledRipple ref={wrapper} className={classNames(ComponentClassNames.ripple)}>
         <StyledRippleCircle
             show={_circle.show}
             color={color}

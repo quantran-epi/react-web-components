@@ -21,7 +21,6 @@ export interface IButtonProps extends
     Partial<NormalButtonProps & AnchorButtonProps>,
     IClassNameProps {
     children: React.ReactNode;
-    disabled?: boolean;
     native?: NativeButtonProps;
     innerRef?: React.RefObject<HTMLButtonElement>;
 }

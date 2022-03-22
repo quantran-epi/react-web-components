@@ -18,38 +18,38 @@ export const Button: FunctionComponent<IButtonProps> = (props) => {
     const { getValueAt } = useResponsiveValue();
     const mergeProps = merge({}, theme.specs.components.button.defaultProps, props);
     const {
-        disabled = false,
-        innerRef,
-        ...otherProps
+        innerRef
     } = mergeProps;
     const { css: _buttonCss } = useButtonStyle(mergeProps);
     const _buttonRef = useRef<HTMLButtonElement>(null);
 
     const _isRippleEnabled = useMemo<boolean>(() => {
+        if (mergeProps.disabled) return false;
         let buttonType = getValueAt(mergeProps.type, screenSize);
         if (mergeProps.ripple !== undefined) return mergeProps.ripple;
         return theme.specs.components.button.type[buttonType].ripple.enabled;
     }, [mergeProps])
 
     const _handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        if (!otherProps.onClick) return;
-        if (!(otherProps.onClick instanceof Function)) console.warn("onClick should be a function");
-        otherProps.onClick(e);
-    }, [otherProps])
+        if (mergeProps.disabled) return;
+        if (!mergeProps.onClick) return;
+        if (!(mergeProps.onClick instanceof Function)) console.warn("onClick should be a function");
+        mergeProps.onClick(e);
+    }, [mergeProps])
 
     const _rippleColor = (): string => {
         if (!_isRippleEnabled) return "";
         if (mergeProps.rippleColor) return theme.functions.color.resolve(mergeProps.rippleColor);
-        let buttonType = getValueAt(otherProps.type, screenSize);
+        let buttonType = getValueAt(mergeProps.type, screenSize);
         return theme.specs.components.button.type[buttonType].ripple.color;
     }
     return <StyledButton
         ref={_buttonRef}
         componentCss={_buttonCss}
-        className={classNames(ComponentClassNames.button, otherProps.className)}
+        className={classNames(ComponentClassNames.button, mergeProps.className)}
         onClick={_handleClick}
-        {...otherProps.native}>
-        {otherProps.children}
+        {...mergeProps.native}>
+        {mergeProps.children}
         {_isRippleEnabled && <Ripple color={_rippleColor()} />}
     </StyledButton>
 }

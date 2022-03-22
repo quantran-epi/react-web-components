@@ -49,6 +49,7 @@ type IUseCssProperty = {
     scale: CssPropertyGenerator<number>;
     position: CssPropertyGenerator<CssPositionType>;
     overflow: CssPropertyGenerator<OverflowPropertyGeneratorParams>;
+    opacity: CssPropertyGenerator<number>;
     _hover: CssPseudoGenerator;
     _focus: CssPseudoGenerator;
     _active: CssPseudoGenerator;
@@ -70,6 +71,10 @@ export const useCssProperty = (props?: IUseCssPropertyProps): IUseCssProperty =>
 
     const _scale = (callback?: CssPropertyValueCallback<number>): string => {
         return _getString(CssPropertyNames.transform, `scale(${callback()})`)
+    }
+
+    const _opacity = (callback?: CssPropertyValueCallback<number>): string => {
+        return _getString(CssPropertyNames.opacity, callback().toString());
     }
 
     const _position = (callback?: CssPropertyValueCallback<CssPositionType>): string => {
@@ -194,6 +199,7 @@ export const useCssProperty = (props?: IUseCssPropertyProps): IUseCssProperty =>
         scale: _scale,
         position: _position,
         overflow: _overflow,
+        opacity: _opacity,
         _hover: _hover,
         _active: _active,
         _focus: _focus,

@@ -16,7 +16,7 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
     const ResponsiveValue = useResponsiveValue();
     const ResponsiveCss = useResponsiveCss();
     const {
-        cursor, shadow, border, transition, bgColor, _hover, _active, scale, overflow, position
+        cursor, shadow, border, transition, bgColor, _hover, _active, scale, overflow, position, opacity
     } = useCssProperty();
     const { theme } = useTheme();
 
@@ -26,6 +26,20 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
             css.push(overflow(() => ({
                 both: "hidden"
             })));
+        if (!props.disabled) {
+            css.push(_hover(() => `
+                    ${shadow(() =>
+                (props.type !== "primary" || props.disabledElevation)
+                    ? "none" : theme.specs.components.button.shadow._hover.value)}
+                `));
+
+            if (props.type === "primary" && !props.disabledElevation)
+                css.push(_active(() => `
+                    ${shadow(() => theme.specs.shadow[2])}
+                    ${scale(() => 0.99)}`));
+        }
+        else css.push(opacity(() => 0.5))
+        
         css.push(position(() => "relative"));
         css.push(border(() => "none"));
         css.push(bgColor(() => "transparent"));
@@ -39,14 +53,6 @@ export const useButtonStyle = (props: IUseButtonStyleProps): IUseButtonStyle => 
         css.push(shadow(() =>
             (props.type !== "primary" || props.disabledElevation)
                 ? "none" : theme.specs.components.button.shadow.value));
-        css.push(_hover(() => `
-                ${shadow(() =>
-            (props.type !== "primary" || props.disabledElevation)
-                ? "none" : theme.specs.components.button.shadow._hover.value)}
-            `));
-        css.push((props.type === "primary" && !props.disabledElevation) ? _active(() => `
-            ${shadow(() => theme.specs.shadow[2])}
-            ${scale(() => 0.99)}`) : '');
         return css.join("");
     }
 

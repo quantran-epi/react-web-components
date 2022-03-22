@@ -33,6 +33,7 @@ export const CssPropertyNames = {
     overflow: "overflow",
     overflowX: "overflow-x",
     overflowY: "overflow-y",
+    opacity: "opacity",
 
     pseudoClasses: {
         hover: ":hover",

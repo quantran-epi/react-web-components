@@ -76,8 +76,8 @@ const componentPalette: ThemeComponentColorPalette = {
     border800: colorPalette.gray800,
     border900: colorPalette.gray900,
 
-    link: colorPalette.primary300,
-    linkHover: colorPalette.primary100,
+    link: colorPalette.primary500,
+    linkHover: colorPalette.primary700,
     linkVisited: colorPalette.primary900
 }
 

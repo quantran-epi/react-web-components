@@ -53,3 +53,11 @@ export const DisableElevation = () => <React.Fragment>
     <Button size={"lg"} marginHorizontal={10} disabledElevation>Large Button</Button>
 </React.Fragment>
 
+export const DisableButton = () => <React.Fragment>
+    <Button marginHorizontal={10} disabled>Default Button</Button>
+    <Button type={"dashed"} marginHorizontal={10} disabled>Dashed Button</Button>
+    <Button type={"outlined"} marginHorizontal={10} disabled>Outlined Button</Button>
+    <Button type={"text"} marginHorizontal={10} disabled>Text Button</Button>
+    <Button type={"link"} marginHorizontal={10} disabled>Link Button</Button>   
+</React.Fragment>
+

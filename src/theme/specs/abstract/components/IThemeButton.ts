@@ -49,6 +49,7 @@ export interface IButtonStyleProps extends
     disabledElevation?: boolean;
     ripple?: boolean;
     rippleColor?: LiteralUnion<keyof ThemeShortHandColor | keyof ThemeColorPalette, string>;
+    disabled?: boolean;
 }
 
 export interface IThemeButton {
