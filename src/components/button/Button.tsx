@@ -2,7 +2,7 @@ import { useTheme } from '@theme/provider';
 import { useBreakpoint, useResponsiveValue } from '@theme/responsive/hooks';
 import classNames from 'classnames';
 import { merge } from 'lodash';
-import React, { FunctionComponent, useMemo, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { Ripple } from '../ripple';
 import { ComponentClassNames } from '../base/constants';
@@ -17,11 +17,7 @@ export const Button: FunctionComponent<IButtonProps> = (props) => {
     const { screenSize } = useBreakpoint();
     const { getValueAt } = useResponsiveValue();
     const mergeProps = merge({}, theme.specs.components.button.defaultProps, props);
-    const {
-        innerRef
-    } = mergeProps;
     const { css: _buttonCss } = useButtonStyle(mergeProps);
-    const _buttonRef = useRef<HTMLButtonElement>(null);
 
     const _isRippleEnabled = useMemo<boolean>(() => {
         if (mergeProps.disabled) return false;
@@ -44,7 +40,7 @@ export const Button: FunctionComponent<IButtonProps> = (props) => {
         return theme.specs.components.button.type[buttonType].ripple.color;
     }
     return <StyledButton
-        ref={_buttonRef}
+        ref={props.innerRef}
         componentCss={_buttonCss}
         className={classNames(ComponentClassNames.button, mergeProps.className)}
         onClick={_handleClick}

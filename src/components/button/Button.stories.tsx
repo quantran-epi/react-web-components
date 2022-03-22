@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Button } from './Button';
 
 export default {
@@ -58,6 +58,14 @@ export const DisableButton = () => <React.Fragment>
     <Button type={"dashed"} marginHorizontal={10} disabled>Dashed Button</Button>
     <Button type={"outlined"} marginHorizontal={10} disabled>Outlined Button</Button>
     <Button type={"text"} marginHorizontal={10} disabled>Text Button</Button>
-    <Button type={"link"} marginHorizontal={10} disabled>Link Button</Button>   
+    <Button type={"link"} marginHorizontal={10} disabled>Link Button</Button>
 </React.Fragment>
+
+export const ButtonTest = () => {
+    const buttonRef = useRef();
+    return <React.Fragment>
+        <Button onClick={() => console.log(buttonRef)} marginHorizontal={10} innerRef={buttonRef}>Small Button</Button>
+    </React.Fragment>
+}
+
 
