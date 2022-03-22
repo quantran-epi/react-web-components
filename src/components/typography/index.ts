@@ -1,2 +1,2 @@
-export * from './heading/Heading';
-export * from './text/Text';
+export * from './Typography.types';
+export * from './Typography';

@@ -2,8 +2,25 @@ import { IThemeTypography } from "@theme/specs/abstract/components";
 import { ThemeFontWeight } from "../ThemeFontWeight";
 
 export const ThemeTypography: IThemeTypography = {
+    defaultProps: {
+        variant: "body1",
+    },
     base: {
-        htmlFontSize: "16px"
+        htmlFontSize: "16px",
+        tagNameMapping: {
+            h1: "h1",
+            h2: "h2",
+            h3: "h3",
+            h4: "h4",
+            h5: "h5",
+            h6: "h6",
+            body1: "p",
+            body2: "p",
+            subtitle1: "span",
+            subtitle2: "span",
+            button: "span",
+            caption: "span"
+        }
     },
     components: {
         h1: {
