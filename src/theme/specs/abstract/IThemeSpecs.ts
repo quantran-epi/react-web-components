@@ -1,19 +1,19 @@
+import { IThemeFontWeight } from './base/IThemeFontWeight';
 import { IThemeShadow } from './base/IThemeShadow';
 import { IThemeButton } from './components/IThemeButton';
 import { IThemeBreakpoint } from './base/IThemeBreakpoint';
 import { IThemeColor } from './base/IThemeColor';
-import { IThemeFontFamily } from './base/IThemeFontFamily';
-import { IThemeFontSize } from './base/IThemeFontSize';
 import { IThemeSpacing } from './base/IThemeSpacing';
+import { IThemeTypography } from './components';
 
 interface IThemeComponentSpecs {
     button: IThemeButton;
+    typography: IThemeTypography;
 }
 
 export interface IThemeSpecs {
     color: IThemeColor;
-    fontSize: IThemeFontSize;
-    fontFamily: IThemeFontFamily;
+    fontWeight: IThemeFontWeight;
     spacing: IThemeSpacing;
     breakpoint: IThemeBreakpoint;
     shadow: IThemeShadow;

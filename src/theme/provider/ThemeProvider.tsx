@@ -1,6 +1,7 @@
 import { IThemeSpecs } from '@theme/specs/abstract/IThemeSpecs';
 import DefaultThemeSpecs from '@theme/specs/default';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useMemo, useState } from 'react';
+import { GlobalStyle, IGlobalStyleProps } from './GlobalStyle';
 
 interface IThemeProviderProps {
     value?: IThemeSpecs;
@@ -28,6 +29,13 @@ export const ThemeProvider: FunctionComponent<IThemeProviderProps> = ({
         return value || DefaultThemeSpecs;
     }
 
+    const _globalStyle = useMemo<IGlobalStyleProps>(() => {
+        let theme = _value();
+        return {
+            htmlFontSize: theme.components.typography.base.htmlFontSize
+        }
+    }, [value, _value])
+
     const _switchTheme = (theme: IThemeSpecs): void => {
         _setContext({
             ..._context,
@@ -41,6 +49,7 @@ export const ThemeProvider: FunctionComponent<IThemeProviderProps> = ({
     });
 
     return <ThemeContext.Provider value={_context}>
+        <GlobalStyle {..._globalStyle} />
         {children}
     </ThemeContext.Provider>;
 }

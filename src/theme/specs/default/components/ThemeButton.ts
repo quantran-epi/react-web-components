@@ -1,8 +1,8 @@
 import { IThemeButton } from "@theme/specs/abstract/components";
 import { ThemeColor } from "../ThemeColor";
-import { ThemeFontSize } from "../ThemeFontSize";
 import { ThemeShadow } from "../ThemeShadow";
 import { ThemeSpacing } from "../ThemeSpacing";
+import { ThemeTypography } from "./ThemeTypography";
 
 export const ThemeButton: IThemeButton = {
     defaultProps: {
@@ -106,16 +106,16 @@ export const ThemeButton: IThemeButton = {
     },
     size: {
         sm: {
-            fontSize: ThemeFontSize.values.sm,
+            fontSize: ThemeTypography.components.button.fontSize,
             padding: ThemeSpacing.generator([1.25, 2.25])
         },
         md: {
-            fontSize: ThemeFontSize.values.md,
-            padding: ThemeSpacing.generator([1.5, 2.5])
+            fontSize: ThemeTypography.components.button.fontSize,
+            padding: ThemeSpacing.generator([2, 3])
         },
         lg: {
-            fontSize: ThemeFontSize.values.lg,
-            padding: ThemeSpacing.generator([1.75, 2.75])
+            fontSize: ThemeTypography.components.button.fontSize,
+            padding: ThemeSpacing.generator([2.75, 3.75])
         }
     },
     shape: {

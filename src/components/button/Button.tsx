@@ -39,6 +39,7 @@ export const Button: FunctionComponent<IButtonProps> = (props) => {
         let buttonType = getValueAt(mergeProps.type, screenSize);
         return theme.specs.components.button.type[buttonType].ripple.color;
     }
+    
     return <StyledButton
         ref={props.innerRef}
         componentCss={_buttonCss}
